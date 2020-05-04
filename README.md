@@ -15,7 +15,7 @@ $ echo "alias dconfig='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME
 $ source ~/.zshrc
 ```
 
-Add and commit dotfiles to repo:
+Add and commit dotfiles to the local repo:
 ```
 $ dconfig add .gitconfig .tmux.conf .vimrc .zshrc 
 $ dconfig commit -m “Initial commit"
