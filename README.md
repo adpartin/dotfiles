@@ -2,7 +2,7 @@ References:
 - https://www.atlassian.com/git/tutorials/dotfiles
 
 ### Initial setup of the (bare) git repo for dotfiles
-Create bare git repo and alias to interact with the repo:
+Create bare git repo and an alias to interact with the repo:
 ```
 $ git init --bare $HOME/.dotfiles
 $ alias dconfig='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
