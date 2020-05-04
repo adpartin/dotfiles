@@ -1,0 +1,14 @@
+# thoughtbot.com/upcase/videos/git-customizing
+[user]
+	name = Alex Partin
+	email = 25892264+adpartin@users.noreply.github.com
+[core]
+	editor = vim
+[color]
+	ui = true
+[push]
+	default = upstream
+; [merge]
+; 	ff = only
+; [fetch]
+; 	prune = true
