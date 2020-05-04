@@ -9,7 +9,7 @@ $ alias dconfig='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 $ dconfig config --local status.showUntrackedFiles no
 ```
 
-Add alias to your shell config file (.zshrc):
+Add the alias to your shell config file (.zshrc):
 ```
 $ echo "alias dconfig='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'" >> $HOME/.zshrc
 $ source ~/.zshrc
