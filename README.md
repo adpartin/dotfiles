@@ -29,10 +29,9 @@ $ dconfig push -u origin master
 ```
 
 ### Installing dotfiles on a new system
-Add alias to your shell config file (.zshrc):
+Create alias to manage the repo:
 ```
-$ echo "alias dconfig='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'" >> $HOME/.zshrc
-$ source ~/.zshrc
+$ alias dconfig='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 ```
 
 Add repo name to .gitignore
