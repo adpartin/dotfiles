@@ -27,6 +27,8 @@ Plugin 'tpope/vim-repeat'
 
 Plugin 'machakann/vim-highlightedyank'
 
+Plugin 'vim-scripts/ReplaceWithRegister'
+
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
