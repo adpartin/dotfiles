@@ -61,9 +61,9 @@ alias coac="conda activate"
 alias codea="conda deactivate"
 
 # www.linuxtechi.com/rsync-command-examples-linux/
-alias rsync="rsync -zarvh --progress" 
+alias rsc="rsync -zarvh --progress" 
 
-alias zs="source ~/.zshrc"
+alias sz="source ~/.zshrc"
 # ---------------------
 
 # ========================================================================
