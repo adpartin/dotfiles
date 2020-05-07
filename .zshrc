@@ -35,15 +35,38 @@ export VISUAL="vim"
 # Dotfiles
 alias dconfig='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 
-# Aliases
-# TODO
-# rsync
-# dropbox
-# cd /vol/ml/aprtin/projects
-# CUDA_VISIBLE_DEVICES
+# ---------------------
+# Alises Summit
+# ---------------------
+alias lvim="module load vim"
+alias uvim="module unload vim"
+alias ltmux="module load tmux"
+alias utmux="module unload tmux"
+alias lenv="module load ibm-wml-ce/1.7.0-2"
+alias uenv="module unload ibm-wml-ce/1.7.0-2"
+
+alias shome="/ccs/proj/med106/apartin"
+# ---------------------
+
+# ---------------------
+# Alises MCS
+# ---------------------
+alias prj="cd /vol/ml/apartin/projects/"
+# ---------------------
+
+# ---------------------
+# General
+# ---------------------
+alias coac="conda activate"
+alias codea="conda deactivate"
+
+# www.linuxtechi.com/rsync-command-examples-linux/
+alias rsync="rsync -zarvh --progress" 
+
+alias zs="source ~/.zshrc"
+# ---------------------
 
 # ========================================================================
-
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
