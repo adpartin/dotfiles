@@ -45,7 +45,7 @@ $ git clone --bare git@github.com:adpartin/dotfiles.git $HOME/.dotfiles
 ```
 
 Checkout the actual files from the repo.<br>
-Note that `dconfig checkout` will show an error if `$HOME` contains config files (dotfiles) that the repo is designed to track. In this case, remove those files and re-run the commands.
+Note that `dconfig checkout` will show an error if `$HOME` contains config files (dotfiles) that the repo is designed to track. In this case, backup those files somewhere and re-run the commands.
 ```
 $ dconfig checkout
 $ dconfig config --local status.showUntrackedFiles no
