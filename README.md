@@ -1,7 +1,7 @@
 References:
 - https://www.atlassian.com/git/tutorials/dotfiles
 
-### Initial setup of the (bare) git repo for dotfiles
+# Initial setup of the (bare) git repo for dotfiles
 Create bare git repo and an alias to interact with the repo.
 ```
 $ git init --bare $HOME/.dotfiles
@@ -28,7 +28,17 @@ $ dconfig remote -v
 $ dconfig push -u origin master
 ```
 
-### Installing dotfiles on a new system
+# Installing dotfiles on a new system
+If Oh-My-Zsh is not installed, install from here: https://ohmyz.sh/
+```
+$ sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+```
+
+If Vundle is not installed, install from here: https://github.com/VundleVim/Vundle.vim
+- Download vim plugins and source `.vimrc`:<br>
+  1. Open `.vimrc`, and install plugins by running `:PluginInstall`<br>
+  2. Source file with `:so %`
+
 Create alias to manage the repo.
 ```
 $ alias dconfig='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
