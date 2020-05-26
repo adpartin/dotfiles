@@ -21,6 +21,8 @@ Plugin 'christoomey/vim-tmux-runner'
 
 Plugin 'lifepillar/vim-solarized8'
 
+Plugin 'tpope/vim-surround'
+
 Plugin 'tpope/vim-commentary'
 
 Plugin 'tpope/vim-repeat'
