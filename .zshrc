@@ -71,6 +71,9 @@ hn=`hostname -f`
 if [[ "${hn}" == *"olcf.ornl"* ]]
 then
     alias prj="cd /ccs/proj/med106/apartin"
+elif [[ "${hn}" == *"lambda*.cels.anl.gov"* ]]
+    alias prj="cd /lambda_stor/data/apartin/projects"
+then
 else
     alias prj="cd /vol/ml/apartin/projects/"
 fi
