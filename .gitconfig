@@ -12,3 +12,8 @@
 ; 	ff = only
 ; [fetch]
 ; 	prune = true
+[merge]
+	conflictstyle = diff3
+	tool = vimdiff
+[mergetool]
+	prompt = false
