@@ -68,13 +68,18 @@ alias uenv="module unload ibm-wml-ce/1.7.0-2"
 
 # stackoverflow.com/questions/229551
 hn=`hostname -f`
-if [[ "${hn}" == *"olcf.ornl"* ]]
+echo ${hn}
+if [[ "${hn}" == *"olcf.ornl"* ]];
 then
+    # echo 1
     alias prj="cd /ccs/proj/med106/apartin"
-elif [[ "${hn}" == *"lambda*.cels.anl.gov"* ]]
+elif [[ "${hn}" == *"lambda"* ]];
+    # echo 2
     alias prj="cd /lambda_stor/data/apartin/projects"
 then
 else
+    # echo 3
+    # TODO this doesn't work??
     alias prj="cd /vol/ml/apartin/projects/"
 fi
 

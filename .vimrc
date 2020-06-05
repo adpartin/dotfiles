@@ -16,40 +16,34 @@ Plugin 'VundleVim/Vundle.vim'
 " Run ':TmuxNavigatorProcessList' to check vim-tmux-navigator is properly
 " installed. This plugin didn't work with minpac.
 Plugin 'christoomey/vim-tmux-navigator'
-
 Plugin 'christoomey/vim-tmux-runner'
-
 Plugin 'lifepillar/vim-solarized8'
-
 Plugin 'tpope/vim-surround'
-
 Plugin 'tpope/vim-commentary'
-
 Plugin 'tpope/vim-repeat'
-
 Plugin 'machakann/vim-highlightedyank'
-
 Plugin 'vim-scripts/ReplaceWithRegister'
+
+Plugin 'Vimjas/vim-python-pep8-indent'
+Plugin 'tmhedberg/SimpylFold'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
+
+" allow plugins by file type (required for plugins!)
 filetype plugin indent on    " required
-" To ignore plugin indent changes, instead use:
-" filetype plugin on
-"
+
 " Brief help
 " :PluginList       - lists configured plugins
 " :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
 " :PluginSearch foo - searches for foo; append `!` to refresh local cache
 " :PluginClean      - confirms removal of unused plugins; append `!` to  auto-approve removal
-"
 " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
 " ===========================================================
 
 syntax on  " syntax highlighting, (similar to 'syndtax enable')
 
-" Map the leader
 " https://pybit.es/vim-tricks.html
 let mapleader = ","
 
@@ -89,6 +83,13 @@ nmap k gk
 " Map Esc
 imap jk <esc>
 imap kj <esc>
+
+
+" -----------------------------------------------------------------------------
+"   Plugin configs
+" -----------------------------------------------------------------------------
+let g:python_pep8_indent_hang_closing=0 " TODO does it even work??
+
 
 " -----------------------------------------------------------------------------
 " https://thoughtbot.com/upcase/videos/tmux-vim-integration
