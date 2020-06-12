@@ -68,7 +68,6 @@ alias uenv="module unload ibm-wml-ce/1.7.0-2"
 
 # stackoverflow.com/questions/229551
 hn=`hostname -f`
-echo ${hn}
 if [[ "${hn}" == *"olcf.ornl"* ]];
 then
     # echo 1
