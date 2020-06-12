@@ -12,14 +12,14 @@ sys_name=`uname -a`
 
 if [[ "${hn}" == *"olcf.ornl"* ]]
 then
-    echo "You are on ${hn}"
+    # echo "You are on ${hn}"
     export ZSH="/ccs/home/apartin/.oh-my-zsh"
 elif [[ "${sys_name}" == *"Darwin"* ]]
 then
-    echo "You are on ${sys_name}"
+    # echo "You are on ${sys_name}"
     export ZSH="/Users/apartin/.oh-my-zsh"
 else
-    echo "You are on ${hn}"
+    # echo "You are on ${hn}"
     export ZSH="/homes/apartin/.oh-my-zsh"
 fi
 
