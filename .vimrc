@@ -1,13 +1,15 @@
 set nocompatible " Don't maintain compatibility with Vi. This must be first since it changes other options
-filetype off     " required by Vundle stackoverflow.com/questions/14642956/why-vundle-requires-filetype-off/17045575
 
 " ===========================================================
 "  Vundle settings
 " -----------------------
-" set the runtime path to include Vundle and initialize
+" required by Vundle stackoverflow.com/questions/14642956/
+filetype off
+
+" set runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
-" alternatively, pass a path where Vundle should install plugins
+" or, pass a path where Vundle should install plugins
 " call vundle#begin('~/some/path/here')
 
 " let Vundle manage Vundle, required
@@ -15,14 +17,22 @@ Plugin 'VundleVim/Vundle.vim'
 
 " Run ':TmuxNavigatorProcessList' to check vim-tmux-navigator is properly
 " installed. This plugin didn't work with minpac.
-Plugin 'christoomey/vim-tmux-navigator'
-Plugin 'christoomey/vim-tmux-runner'
-Plugin 'lifepillar/vim-solarized8'
-Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-commentary'
 Plugin 'tpope/vim-repeat'
-Plugin 'machakann/vim-highlightedyank'
+Plugin 'tpope/vim-surround'
+Plugin 'tpope/vim-fugitive'
+
 Plugin 'vim-scripts/ReplaceWithRegister'
+Plugin 'machakann/vim-highlightedyank'
+Plugin 'lifepillar/vim-solarized8'
+
+" Plugin 'vim-airline/vim-airline'
+" Plugin 'vim-airline/vim-airline-themes'
+Plugin 'itchyny/lightline.vim'
+Plugin 'mengelbrecht/lightline-bufferline'
+
+Plugin 'christoomey/vim-tmux-navigator'
+Plugin 'christoomey/vim-tmux-runner'
 
 Plugin 'Vimjas/vim-python-pep8-indent'
 Plugin 'tmhedberg/SimpylFold'
@@ -30,8 +40,9 @@ Plugin 'tmhedberg/SimpylFold'
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 
-" allow plugins by file type (required for plugins!)
-filetype plugin indent on    " required
+" required by Vundle; allow plugins by file type
+filetype plugin indent on
+syntax on  " syntax highlighting (similar to 'syndtax enable')
 
 " Brief help
 " :PluginList       - lists configured plugins
@@ -42,54 +53,101 @@ filetype plugin indent on    " required
 " Put your non-Plugin stuff after this line
 " ===========================================================
 
-syntax on  " syntax highlighting, (similar to 'syndtax enable')
-
 " https://pybit.es/vim-tricks.html
 let mapleader = ","
 
-set number                      " display line numbers
-set relativenumber              " display relative line number
-set showmatch                   " show matching brackets
-set hlsearch                    " highlight search results
-set noswapfile  	            " swap files give annoying warning
-set ttyfast             	    " speed up scrolling in Vim
-set matchpairs+=<:>     	    " highlight matching pairs of brackets. Use '%' char to jump btw them.
-set scrolloff=2                 " keep at least 2 lines below cursor
-set backspace=indent,eol,start  " sane backlspace vi.stackexchange.com/questions/2162/
+set autoindent                  " Copy indent from current line on <cr>
+set backspace=indent,eol,start  " Sane backlspace vi.stackexchange.com/questions/2162/
+set hlsearch                    " Highlight search results
+set laststatus=2                " Show statusbar all the time
+set matchpairs+=<:>     	    " Highlight matching pairs of brackets. Use '%' char to jump btw them.
+set noswapfile  	            " Swap files give annoying warning
+" set noshowmode                  " Don't show vim mode
+set number                      " Display line numbers
+set relativenumber              " Display relative line number
+set ruler                       " Show line number and column number
+set scrolloff=2                 " Keep at least 2 lines below cursor
+set showmatch                   " Show matching brackets
+set showtabline=2               " Show tab line
+set ttyfast             	    " Speed up scrolling in Vim
 
 " stackoverflow.com/questions/234564/tab-key-4-spaces-and-auto-indent-after-curly-braces-in-vim
-set tabstop=4
-set shiftwidth=4
-set expandtab
+set tabstop=4                   " The number of spaces that a <Tab> counts for
+set shiftwidth=4                " Number of spaces to use for (auto) indent
+set expandtab                   " Expand tabs to spaces
 
 " Set colors
 set t_Co=256
 set background=dark
-colorscheme solarized8  " github.com/lifepillar/vim-solarized8
+colorscheme solarized8          " github.com/lifepillar/vim-solarized8
 
 " -----------------------------------------------------------------------------
 "   Mappings
 " -----------------------------------------------------------------------------
+" Make double-<Esc> clear search highlights
 " vi.stackexchange.com/questions/8741/how-to-automatically-turn-off-hlsearch-after-im-done-searching
 nnoremap <esc><esc> :silent! nohls<cr>
 
 " Mappings in Normal mode
-nmap 0 ^
+" nnoremap 0 ^
 
 " Move up and down by visible lines if current line is wrapped
-nmap j gj
-nmap k gk
+nnoremap j gj
+nnoremap k gk
 
 " Map Esc
-imap jk <esc>
-imap kj <esc>
+inoremap jk <esc>
+inoremap kj <esc>
 
+" Map write file
+inoremap <leader>w <esc>:w<cr>
+nnoremap <leader>w :w<cr>
+
+" Map quit file
+inoremap <leader>q <esc>:q<cr>
+nnoremap <leader>q :q<cr>
+
+" Map fold code
+nnoremap <space> za
+" nnoremap <leader>z zMzvzz
+
+" --------------------------------------
+" learnvimscriptthehardway.stevelosh.com
+" --------------------------------------
+nnoremap <leader>ev :vsplit $MYVIMRC<cr>
+nnoremap <leader>sv :source $MYVIMRC<cr>
+
+nnoremap H ^
+nnoremap L g_
+nnoremap J G
+nnoremap K gg
+
+" Put text into python docstring in visual mode
+" vnoremap """ <esc>'<O"""<esc>'>o"""<esc>j^
+
+" iabbrev impd import pandas as pd
+" iabbrev imnp import numpy as np
+" iabbrev imsk import sklearn
 
 " -----------------------------------------------------------------------------
 "   Plugin configs
 " -----------------------------------------------------------------------------
 let g:python_pep8_indent_hang_closing=0 " TODO does it even work??
 
+" Airline
+" let g:airline_powerline_fonts = 1
+" let g:airline_theme = 'simple'
+
+" Lighline
+let g:lightline#bufferline#show_number  = 1           " Buffer number as shown by the :ls command
+let g:lightline#bufferline#shorten_path = 0           " Defines whether to shorten the path
+let g:lightline#bufferline#unnamed      = '[No Name]' " The name to use for unnamed buffers
+
+" let g:lightline                  = {}
+let g:lightline                  = {'colorscheme': 'wombat'}
+let g:lightline.tabline          = {'left': [['buffers']], 'right': [['close']]}
+let g:lightline.component_expand = {'buffers': 'lightline#bufferline#buffers'}
+let g:lightline.component_type   = {'buffers': 'tabsel'}
 
 " -----------------------------------------------------------------------------
 " https://thoughtbot.com/upcase/videos/tmux-vim-integration

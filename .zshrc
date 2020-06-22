@@ -12,14 +12,14 @@ sys_name=`uname -a`
 
 if [[ "${hn}" == *"olcf.ornl"* ]]
 then
-    echo "You are on ${hn}"
+    # echo "You are on ${hn}"
     export ZSH="/ccs/home/apartin/.oh-my-zsh"
 elif [[ "${sys_name}" == *"Darwin"* ]]
 then
-    echo "You are on ${sys_name}"
+    # echo "You are on ${sys_name}"
     export ZSH="/Users/apartin/.oh-my-zsh"
 else
-    echo "You are on ${hn}"
+    # echo "You are on ${hn}"
     export ZSH="/homes/apartin/.oh-my-zsh"
 fi
 
@@ -68,17 +68,13 @@ alias uenv="module unload ibm-wml-ce/1.7.0-2"
 
 # stackoverflow.com/questions/229551
 hn=`hostname -f`
-echo ${hn}
 if [[ "${hn}" == *"olcf.ornl"* ]];
 then
-    # echo 1
     alias prj="cd /ccs/proj/med106/apartin"
 elif [[ "${hn}" == *"lambda"* ]];
-    # echo 2
     alias prj="cd /lambda_stor/data/apartin/projects"
 then
 else
-    # echo 3
     # TODO this doesn't work??
     alias prj="cd /vol/ml/apartin/projects/"
 fi
@@ -154,3 +150,5 @@ else
 fi
 
 
+# Added by fzf
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
