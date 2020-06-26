@@ -151,4 +151,8 @@ fi
 
 
 # Added by fzf
+# export FZF_DEFAULT_COMMAND='ag -u -g ""'
+# export FZF_DEFAULT_COMMAND="rg --files --hidden --follow --glob '!.git'"
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+

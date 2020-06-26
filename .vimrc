@@ -1,65 +1,110 @@
 set nocompatible " Don't maintain compatibility with Vi. This must be first since it changes other options
 
+" " ===========================================================
+" "  Vundle settings
+" " -----------------------
+" " required by Vundle stackoverflow.com/questions/14642956/
+" filetype off
+
+" " set runtime path to include Vundle and initialize
+" set rtp+=~/.vim/bundle/Vundle.vim
+" call vundle#begin()
+" " or, pass a path where Vundle should install plugins
+" " call vundle#begin('~/some/path/here')
+
+" " let Vundle manage Vundle, required
+" Plugin 'VundleVim/Vundle.vim'
+
+" " Run ':TmuxNavigatorProcessList' to check vim-tmux-navigator is properly
+" " installed. This plugin didn't work with minpac.
+" Plugin 'tpope/vim-commentary'
+" Plugin 'tpope/vim-repeat'
+" Plugin 'tpope/vim-surround'
+" Plugin 'tpope/vim-fugitive'
+
+" " Integrate fzf with Vim.
+" " First, install github.com/junegunn/fzf using git
+" Plugin 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+" Plugin 'junegunn/fzf.vim'
+
+" Plugin 'vim-scripts/ReplaceWithRegister'
+" Plugin 'machakann/vim-highlightedyank'
+
+" " Colors
+" Plugin 'lifepillar/vim-solarized8'
+" " Plugin 'dracula/vim', { 'name': 'dracula' }
+
+" " Plugin 'vim-airline/vim-airline'
+" " Plugin 'vim-airline/vim-airline-themes'
+" Plugin 'itchyny/lightline.vim'
+" " Plugin 'mengelbrecht/lightline-bufferline'
+
+" Plugin 'christoomey/vim-tmux-navigator'
+" Plugin 'christoomey/vim-tmux-runner'
+
+" Plugin 'Vimjas/vim-python-pep8-indent'
+" Plugin 'tmhedberg/SimpylFold'
+
+" " All of your Plugins must be added before the following line
+" call vundle#end()            " required
+
+" " required by Vundle; allow plugins by file type
+" filetype plugin indent on
+
+" " Brief help
+" " :PluginList       - lists configured plugins
+" " :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
+" " :PluginSearch foo - searches for foo; append `!` to refresh local cache
+" " :PluginClean      - confirms removal of unused plugins; append `!` to  auto-approve removal
+" " see :h vundle for more details or wiki for FAQ
+" " Put your non-Plugin stuff after this line
+" " ===========================================================
+
 " ===========================================================
-"  Vundle settings
+"  vim-plug settings
 " -----------------------
-" required by Vundle stackoverflow.com/questions/14642956/
-filetype off
-
-" set runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-" or, pass a path where Vundle should install plugins
-" call vundle#begin('~/some/path/here')
-
-" let Vundle manage Vundle, required
-Plugin 'VundleVim/Vundle.vim'
+" Specify a directory for plugins
+" - For Neovim: stdpath('data') . '/plugged'
+" - Avoid using standard Vim directory names like 'plugin'
+call plug#begin('~/.vim/plugged')
 
 " Run ':TmuxNavigatorProcessList' to check vim-tmux-navigator is properly
 " installed. This plugin didn't work with minpac.
-Plugin 'tpope/vim-commentary'
-Plugin 'tpope/vim-repeat'
-Plugin 'tpope/vim-surround'
-Plugin 'tpope/vim-fugitive'
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-fugitive'
 
 " Integrate fzf with Vim.
+" Plugin outside ~/.vim/plugged with post-update hook
 " First, install github.com/junegunn/fzf using git
-Plugin 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plugin 'junegunn/fzf.vim'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
 
-Plugin 'vim-scripts/ReplaceWithRegister'
-Plugin 'machakann/vim-highlightedyank'
+Plug 'vim-scripts/ReplaceWithRegister'
+Plug 'machakann/vim-highlightedyank'
 
 " Colors
-Plugin 'lifepillar/vim-solarized8'
-" Plugin 'dracula/vim', { 'name': 'dracula' }
+Plug 'lifepillar/vim-solarized8'
+" Plug 'dracula/vim', { 'name': 'dracula' }
 
-" Plugin 'vim-airline/vim-airline'
-" Plugin 'vim-airline/vim-airline-themes'
-Plugin 'itchyny/lightline.vim'
-" Plugin 'mengelbrecht/lightline-bufferline'
+" Plug 'vim-airline/vim-airline'
+" Plug 'vim-airline/vim-airline-themes'
+Plug 'itchyny/lightline.vim'
+" Plug 'mengelbrecht/lightline-bufferline'
 
-Plugin 'christoomey/vim-tmux-navigator'
-Plugin 'christoomey/vim-tmux-runner'
+Plug 'christoomey/vim-tmux-navigator'
+" Plug 'christoomey/vim-tmux-runner'
 
-Plugin 'Vimjas/vim-python-pep8-indent'
-Plugin 'tmhedberg/SimpylFold'
+Plug 'Vimjas/vim-python-pep8-indent'
+Plug 'tmhedberg/SimpylFold'
 
-" All of your Plugins must be added before the following line
-call vundle#end()            " required
-
-" required by Vundle; allow plugins by file type
-filetype plugin indent on
-syntax on  " syntax highlighting (similar to 'syndtax enable')
-
-" Brief help
-" :PluginList       - lists configured plugins
-" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
-" :PluginSearch foo - searches for foo; append `!` to refresh local cache
-" :PluginClean      - confirms removal of unused plugins; append `!` to  auto-approve removal
-" see :h vundle for more details or wiki for FAQ
-" Put your non-Plugin stuff after this line
+" Initialize plugin system
+call plug#end()
 " ===========================================================
+
+
+syntax on  " syntax highlighting (similar to 'syndtax enable')
 
 " https://pybit.es/vim-tricks.html
 let mapleader = ","
@@ -89,6 +134,7 @@ set t_Co=256
 set background=dark
 colorscheme solarized8          " github.com/lifepillar/vim-solarized8
 " colorscheme dracula
+
 
 " -----------------------------------------------------------------------------
 "   Mappings
@@ -134,6 +180,7 @@ nnoremap <Leader>rc :%s///gc<Left><Left><Left>
 xnoremap <Leader>r :s///g<Left><Left>
 xnoremap <Leader>rc :s///gc<Left><Left><Left>
 
+
 " --------------------------------------
 " learnvimscriptthehardway.stevelosh.com
 " --------------------------------------
@@ -141,7 +188,7 @@ nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
 
 nnoremap H ^
-nnoremap L g_
+nnoremap L $
 nnoremap J G
 nnoremap K gg
 
@@ -152,11 +199,16 @@ nnoremap K gg
 " iabbrev imnp import numpy as np
 " iabbrev imsk import sklearn
 
+
 " -----------------------------------------------------------------------------
 "   Plugin configs
 " -----------------------------------------------------------------------------
 let g:python_pep8_indent_hang_closing=0 " TODO does it even work??
 
+
+" -----------------------------------------------------------------------------
+"   Status line
+" -----------------------------------------------------------------------------
 " Airline
 " let g:airline_powerline_fonts = 1
 " let g:airline_theme = 'simple'
@@ -176,6 +228,7 @@ let g:lightline.active = {'right': [['lineinfo'], ['percent']]}
 " let g:lightline.tabline          = {'left': [['buffers']], 'right': [['close']]}
 " let g:lightline.component_expand = {'buffers': 'lightline#bufferline#buffers'}
 " let g:lightline.component_type   = {'buffers': 'tabsel'}
+
 
 " -----------------------------------------------------------------------------
 " https://thoughtbot.com/upcase/videos/tmux-vim-integration
