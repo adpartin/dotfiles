@@ -22,14 +22,22 @@ Plugin 'tpope/vim-repeat'
 Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-fugitive'
 
+" Integrate fzf with Vim.
+" First, install github.com/junegunn/fzf using git
+Plugin 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plugin 'junegunn/fzf.vim'
+
 Plugin 'vim-scripts/ReplaceWithRegister'
 Plugin 'machakann/vim-highlightedyank'
+
+" Colors
 Plugin 'lifepillar/vim-solarized8'
+" Plugin 'dracula/vim', { 'name': 'dracula' }
 
 " Plugin 'vim-airline/vim-airline'
 " Plugin 'vim-airline/vim-airline-themes'
 Plugin 'itchyny/lightline.vim'
-Plugin 'mengelbrecht/lightline-bufferline'
+" Plugin 'mengelbrecht/lightline-bufferline'
 
 Plugin 'christoomey/vim-tmux-navigator'
 Plugin 'christoomey/vim-tmux-runner'
@@ -62,7 +70,7 @@ set hlsearch                    " Highlight search results
 set laststatus=2                " Show statusbar all the time
 set matchpairs+=<:>     	    " Highlight matching pairs of brackets. Use '%' char to jump btw them.
 set noswapfile  	            " Swap files give annoying warning
-" set noshowmode                  " Don't show vim mode
+set noshowmode                  " Don't show vim mode (use when lightline is used)
 set number                      " Display line numbers
 set relativenumber              " Display relative line number
 set ruler                       " Show line number and column number
@@ -76,10 +84,11 @@ set tabstop=4                   " The number of spaces that a <Tab> counts for
 set shiftwidth=4                " Number of spaces to use for (auto) indent
 set expandtab                   " Expand tabs to spaces
 
-" Set colors
+" Colors
 set t_Co=256
 set background=dark
 colorscheme solarized8          " github.com/lifepillar/vim-solarized8
+" colorscheme dracula
 
 " -----------------------------------------------------------------------------
 "   Mappings
@@ -107,9 +116,23 @@ nnoremap <leader>w :w<cr>
 inoremap <leader>q <esc>:q<cr>
 nnoremap <leader>q :q<cr>
 
-" Map fold code
+" Map fold code; TODO: how to unbind za
 nnoremap <space> za
 " nnoremap <leader>z zMzvzz
+
+" Press * to search for the term under the cursor or a visual selection and
+" then press a key below to replace all instances of it in the current file.
+" github.com/nickjj/dotfiles/blob/master/.vimrc
+nnoremap <Leader>r :%s///g<Left><Left>
+nnoremap <Leader>rc :%s///gc<Left><Left><Left>
+
+" The same as above but instead of acting on the whole file it will be
+" restricted to the previously visually selected range. You can do that by
+" pressing *, visually selecting the range you want it to apply to and then
+" press a key below to replace all instances of it in the current selection.
+" github.com/nickjj/dotfiles/blob/master/.vimrc
+xnoremap <Leader>r :s///g<Left><Left>
+xnoremap <Leader>rc :s///gc<Left><Left><Left>
 
 " --------------------------------------
 " learnvimscriptthehardway.stevelosh.com
@@ -139,15 +162,20 @@ let g:python_pep8_indent_hang_closing=0 " TODO does it even work??
 " let g:airline_theme = 'simple'
 
 " Lighline
-let g:lightline#bufferline#show_number  = 1           " Buffer number as shown by the :ls command
-let g:lightline#bufferline#shorten_path = 0           " Defines whether to shorten the path
-let g:lightline#bufferline#unnamed      = '[No Name]' " The name to use for unnamed buffers
+" github.com/statico/dotfiles/blob/202e30b23e5216ffb6526cce66a0ef4fa7070456/.vim/vimrc
+" let g:lightline#bufferline#show_number  = 1           " Buffer number as shown by the :ls command
+" let g:lightline#bufferline#shorten_path = 0           " Defines whether to shorten the path
+" let g:lightline#bufferline#unnamed      = '[No Name]' " The name to use for unnamed buffers
 
-" let g:lightline                  = {}
-let g:lightline                  = {'colorscheme': 'wombat'}
-let g:lightline.tabline          = {'left': [['buffers']], 'right': [['close']]}
-let g:lightline.component_expand = {'buffers': 'lightline#bufferline#buffers'}
-let g:lightline.component_type   = {'buffers': 'tabsel'}
+let g:lightline = {'colorscheme': 'wombat'}
+let g:lightline.active = {'left': [['mode', 'paste'], ['readonly', 'filename', 'modified']]}
+let g:lightline.active = {'right': [['lineinfo'], ['percent']]}
+" let g:lightline.active = {'right': [['lineinfo'], ['percent'], ['fileformat', 'fileencoding']]}
+
+" let g:lightline.tabline          = {'left': [['buffers']]}
+" let g:lightline.tabline          = {'left': [['buffers']], 'right': [['close']]}
+" let g:lightline.component_expand = {'buffers': 'lightline#bufferline#buffers'}
+" let g:lightline.component_type   = {'buffers': 'tabsel'}
 
 " -----------------------------------------------------------------------------
 " https://thoughtbot.com/upcase/videos/tmux-vim-integration
