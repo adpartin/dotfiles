@@ -29,15 +29,30 @@ $ dconfig push -u origin master
 ```
 
 # Installing dotfiles on a new system
-If Oh-My-Zsh is not installed, install from here: https://ohmyz.sh/
+Backup the dotfiles you want to replace<br>.
+```sh
+TODO
 ```
+
+Install Oh-My-Zsh (https://ohmyz.sh/)
+```sh
 $ sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 ```
 
-If Vundle is not installed, install from here: https://github.com/VundleVim/Vundle.vim
-- Download vim plugins and source `.vimrc`:<br>
-  1. Open `.vimrc`, and install plugins by running `:PluginInstall`<br>
-  2. Source file with `:so %`
+If Vundle (https://github.com/VundleVim/Vundle.vim), download from here:
+```sh
+$ git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+```
+Install plugins by running `:PluginInstall` and source `.vimrc` with `:so %`.
+
+If Vim-plug (https://github.com/junegunn/vim-plug), download from here:
+```sh
+$ curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+```
+
+Install plugins by running `:PlugInstall` and source `.vimrc` with `:so %`.
+
 
 Create alias to manage the repo.
 ```
