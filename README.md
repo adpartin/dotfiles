@@ -29,7 +29,7 @@ $ dconfig push -u origin master
 ```
 
 # Installing dotfiles on a new system
-Backup the dotfiles you want to replace<br>.
+Backup the dotfiles you want to replace.
 ```sh
 TODO
 ```
