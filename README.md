@@ -39,19 +39,18 @@ Install Oh-My-Zsh (https://ohmyz.sh/)
 $ sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 ```
 
-If Vundle (https://github.com/VundleVim/Vundle.vim), download from here:
-```sh
-$ git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
-```
-Install plugins by running `:PluginInstall` and source `.vimrc` with `:so %`.
+- If Vundle (https://github.com/VundleVim/Vundle.vim), download from here:
+    ```sh
+    $ git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+    ```
+    Install plugins by running `:PluginInstall` and source `.vimrc` with `:so %`.
 
-If Vim-plug (https://github.com/junegunn/vim-plug), download from here:
-```sh
-$ curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+- If Vim-plug (https://github.com/junegunn/vim-plug), download from here:
+    ```sh
+    $ curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-```
-
-Install plugins by running `:PlugInstall` and source `.vimrc` with `:so %`.
+    ```
+    Install plugins by running `:PlugInstall` and source `.vimrc` with `:so %`.
 
 
 Create alias to manage the repo.
