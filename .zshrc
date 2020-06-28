@@ -1,11 +1,8 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
-# Path to your oh-my-zsh installation.
-# export ZSH="/ccs/home/apartin/.oh-my-zsh"
-
 # ---------------------
-# Figure out the system
+# Determine system
 # ---------------------
 hn=`hostname -f`
 sys_name=`uname -a`
@@ -23,9 +20,15 @@ else
     export ZSH="/homes/apartin/.oh-my-zsh"
 fi
 
+# --------------------------------------------
+# Colors
+# --------------------------------------------
 # Theme
 # github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="gianu"
+ZSH_THEME="robbyrussell"
+# ZSH_THEME="gianu"
+# ZSH_THEME="avit"
+# ZSH_THEME="simple"
 
 # --------------------------------------------
 # Plugins
@@ -36,7 +39,12 @@ ZSH_THEME="gianu"
 # Standard plugins are in ~/.oh-my-zsh/plugins/*
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git)
+plugins=(
+    git
+    zsh-syntax-highlighting
+    zsh-autosuggestions
+)
+# fzf
 # --------------------------------------------
 
 source $ZSH/oh-my-zsh.sh
@@ -47,15 +55,51 @@ source $ZSH/oh-my-zsh.sh
 # users are encouraged to define aliases within the ZSH_CUSTOM folder.
 # For a full list of active aliases, run `alias`.
 
+# Dotfiles
+alias dconfig='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+
 # Editor
 export EDITOR="vim"
 export VISUAL="vim"
 
-# Dotfiles
-alias dconfig='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+# ---------------------
+# Vim functionality
+# ---------------------
+# gist.github.com/LukeSmithxyz/e62f26e55ea8b0ed41a65912fbebbe52
+# github.com/BrodieRobertson/dotfiles/blob/master/.zshrc
+bindkey -v
+export KEYTIMEOUT=1
+
+# Use vim keys in tab complete menu
+bindkey -M menuselect 'h' vi-backward-char
+bindkey -M menuselect 'k' vi-up-line-or-history
+bindkey -M menuselect 'l' vi-forward-char
+bindkey -M menuselect 'j' vi-down-line-or-history
+bindkey -v '^?' backward-delete-char
+
+# # Change cursor shape for different vi modes.
+# function zle-keymap-select {
+#   if [[ ${KEYMAP} == vicmd ]] ||
+#      [[ $1 = 'block' ]]; then
+#     echo -ne '\e[1 q'
+#   elif [[ ${KEYMAP} == main ]] ||
+#        [[ ${KEYMAP} == viins ]] ||
+#        [[ ${KEYMAP} = '' ]] ||
+#        [[ $1 = 'beam' ]]; then
+#     echo -ne '\e[5 q'
+#   fi
+# }
+# zle -N zle-keymap-select
+# zle-line-init() {
+#     zle -K viins # initiate `vi insert` as keymap (can be removed if `bindkey -V` has been set elsewhere)
+#     echo -ne "\e[5 q"
+# }
+# zle -N zle-line-init
+# echo -ne '\e[5 q' # Use beam shape cursor on startup.
+# preexec() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
 
 # ---------------------
-# Alises Summit
+# Alias Summit
 # ---------------------
 alias lvim="module load vim"
 alias uvim="module unload vim"
@@ -66,11 +110,13 @@ alias lenv="module load ibm-wml-ce/1.7.0-2"
 alias uenv="module unload ibm-wml-ce/1.7.0-2"
 # ---------------------
 
+# TODO this maybe unnecessary if when using zsh-autosuggestions
 # stackoverflow.com/questions/229551
 hn=`hostname -f`
 if [[ "${hn}" == *"olcf.ornl"* ]];
 then
-    alias prj="cd /ccs/proj/med106/apartin"
+    alias med106="cd /ccs/proj/med106/apartin"
+    alias med110="cd /ccs/proj/med110/apartin"
 elif [[ "${hn}" == *"lambda"* ]];
     alias prj="cd /lambda_stor/data/apartin/projects"
 then
@@ -80,7 +126,7 @@ else
 fi
 
 # ---------------------
-# General
+# Alias General
 # ---------------------
 alias coac="conda activate"
 alias codea="conda deactivate"
@@ -150,7 +196,9 @@ else
 fi
 
 
-# Added by fzf
+# ---------------------
+# FZF
+# ---------------------
 # export FZF_DEFAULT_COMMAND='ag -u -g ""'
 # export FZF_DEFAULT_COMMAND="rg --files --hidden --follow --glob '!.git'"
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

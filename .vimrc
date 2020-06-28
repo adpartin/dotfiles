@@ -74,6 +74,7 @@ Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-fugitive'
+" Plug 'mhinz/vim-signify'
 
 " Integrate fzf with Vim.
 " Plugin outside ~/.vim/plugged with post-update hook
@@ -86,7 +87,11 @@ Plug 'machakann/vim-highlightedyank'
 
 " Colors
 Plug 'lifepillar/vim-solarized8'
+" Plug 'flazz/vim-colorschemes'
+" Plug 'sainnhe/forest-night'
+" Plug 'joshdick/onedark.vim'
 " Plug 'dracula/vim', { 'name': 'dracula' }
+" Plug 'sheerun/vim-polyglot'
 
 " Plug 'vim-airline/vim-airline'
 " Plug 'vim-airline/vim-airline-themes'
@@ -103,12 +108,24 @@ Plug 'tmhedberg/SimpylFold'
 call plug#end()
 " ===========================================================
 
-
-syntax on  " syntax highlighting (similar to 'syndtax enable')
-
 " https://pybit.es/vim-tricks.html
 let mapleader = ","
 
+" Colors
+syntax on  " syntax highlighting (similar to 'syndtax enable')
+set t_Co=256
+set background=dark
+colorscheme solarized8
+" colorscheme forest-night
+" colorscheme molokai
+" colorscheme dessert
+" colorscheme wombat
+" colorscheme onedark
+" colorscheme dracula
+
+" -----------------------------------------------------------------------------
+"   Basic Settings
+" -----------------------------------------------------------------------------
 set autoindent                  " Copy indent from current line on <cr>
 set backspace=indent,eol,start  " Sane backlspace vi.stackexchange.com/questions/2162/
 set hlsearch                    " Highlight search results
@@ -128,13 +145,6 @@ set ttyfast             	    " Speed up scrolling in Vim
 set tabstop=4                   " The number of spaces that a <Tab> counts for
 set shiftwidth=4                " Number of spaces to use for (auto) indent
 set expandtab                   " Expand tabs to spaces
-
-" Colors
-set t_Co=256
-set background=dark
-colorscheme solarized8          " github.com/lifepillar/vim-solarized8
-" colorscheme dracula
-
 
 " -----------------------------------------------------------------------------
 "   Mappings
@@ -228,6 +238,26 @@ let g:lightline.active = {'right': [['lineinfo'], ['percent']]}
 " let g:lightline.tabline          = {'left': [['buffers']], 'right': [['close']]}
 " let g:lightline.component_expand = {'buffers': 'lightline#bufferline#buffers'}
 " let g:lightline.component_type   = {'buffers': 'tabsel'}
+
+
+" -----------------------------------------------------------------------------
+"   FZF
+" -----------------------------------------------------------------------------
+" github.com/tallguyjenks/.dotfiles/blob/master/nvim/.config/nvim/init.vim
+" noremap <C-f> <Esc><Esc>:Files!<CR>
+" inoremap <C-f> <Esc><Esc>:BLines!<CR>
+" noremap <C-g> <Esc><Esc>:BCommits!<CR>
+" Bat Preview Theme
+" let $BAT_THEME = 'Solarized (dark)'
+" Let FZF find hidden files and folders
+" let $FZF_DEFAULT_COMMAND='find . -not -path "*/\.git*" -type f -print'
+
+" github.com/nickjj/dotfiles/blob/master/.vimrc
+" nnoremap <silent> <C-p> :FZF -m<CR>
+" nnoremap <silent> <Leader><Enter> :Buffers<CR>
+" nnoremap <silent> <Leader>l :Lines<CR>
+
+" https://jesseleite.com/posts/2/its-dangerous-to-vim-alone-take-fzf
 
 
 " -----------------------------------------------------------------------------
