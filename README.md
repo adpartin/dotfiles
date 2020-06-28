@@ -34,25 +34,27 @@ Backup the dotfiles you want to replace.
 TODO
 ```
 
-Install Oh-My-Zsh and plugins (https://ohmyz.sh/)
+Install shell tools (https://ohmyz.sh/)
 ```sh
 $ sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 $ git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 $ git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+$ git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+$ ~/.fzf/install
 ```
 
 - If Vundle (https://github.com/VundleVim/Vundle.vim), download from here:
     ```sh
     $ git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
     ```
-    Install plugins by running `:PluginInstall` and source `.vimrc` with `:so %`.
+    Open `.vimrc`, install plugins by running `:PluginInstall` and source `.vimrc` with `:so %`.
 
 - If Vim-plug (https://github.com/junegunn/vim-plug), download from here:
     ```sh
     $ curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
     ```
-    Install plugins by running `:PlugInstall` and source `.vimrc` with `:so %`.
+    Open `.vimrc`, install plugins by running `:PlugInstall` and source `.vimrc` with `:so %`.
 
 
 Create alias to manage the repo.
