@@ -34,9 +34,11 @@ Backup the dotfiles you want to replace.
 TODO
 ```
 
-Install Oh-My-Zsh (https://ohmyz.sh/)
+Install Oh-My-Zsh and plugins (https://ohmyz.sh/)
 ```sh
 $ sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+$ git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+$ git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 ```
 
 - If Vundle (https://github.com/VundleVim/Vundle.vim), download from here:
