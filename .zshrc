@@ -62,8 +62,9 @@ alias dconfig='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 export EDITOR="vim"
 export VISUAL="vim"
 
+
 # ---------------------
-# Vim functionality
+# Vim mode
 # ---------------------
 # gist.github.com/LukeSmithxyz/e62f26e55ea8b0ed41a65912fbebbe52
 # github.com/BrodieRobertson/dotfiles/blob/master/.zshrc
@@ -98,9 +99,10 @@ bindkey -v '^?' backward-delete-char
 # echo -ne '\e[5 q' # Use beam shape cursor on startup.
 # preexec() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
 
-# ---------------------
+
+# ------------------------------------------
 # Alias Summit
-# ---------------------
+# ------------------------------------------
 alias lvim="module load vim"
 alias uvim="module unload vim"
 # alias ltmux="module load tmux"
@@ -108,40 +110,53 @@ alias ltmux="module load tmux/3.1b"
 alias utmux="module unload tmux"
 alias lenv="module load ibm-wml-ce/1.7.0-2"
 alias uenv="module unload ibm-wml-ce/1.7.0-2"
-# ---------------------
 
-# TODO this maybe unnecessary if when using zsh-autosuggestions
+
+# ------------------------------------------
+# Alias for fast access to dirs
+# ------------------------------------------
 # stackoverflow.com/questions/229551
-hn=`hostname -f`
-if [[ "${hn}" == *"olcf.ornl"* ]];
-then
-    alias md106="cd /ccs/proj/med106/apartin"
-    alias md110="cd /ccs/proj/med110/apartin"
-    alias gpfs="cd /gpfs/alpine/scratch/apartin"
-elif [[ "${hn}" == *"lambda"* ]];
-    alias prj="cd /lambda_stor/data/apartin/projects"
-then
-else
-    # TODO this doesn't work??
-    alias prj="cd /vol/ml/apartin/projects/"
-fi
+# hn=`hostname -f`
+# if [[ "${hn}" == *"olcf.ornl"* ]];
+# then
+#     alias md106="cd /ccs/proj/med106/apartin"
+#     alias md110="cd /ccs/proj/med110/apartin"
+#     alias gpfs="cd /gpfs/alpine/scratch/apartin"
+# elif [[ "${hn}" == *"lambda"* ]];
+#     alias prj="cd /lambda_stor/data/apartin/projects"
+# then
+# else
+#     # TODO this doesn't work??
+#     alias prj="cd /vol/ml/apartin/projects/"
+# fi
 
-# ---------------------
+# Summit
+alias md106="cd /ccs/proj/med106/apartin/projects"
+alias md110="cd /ccs/proj/med110/apartin/projects"
+alias gpfs="cd /gpfs/alpine/scratch/apartin"
+
+# Lambda
+alias prj="cd /lambda_stor/data/apartin/projects"
+
+# Vol
+alias vl="cd /vol/ml/apartin/projects"
+
+
+# ------------------------------------------
 # Alias General
-# ---------------------
+# ------------------------------------------
 alias coac="conda activate"
 alias codea="conda deactivate"
 
 # www.linuxtechi.com/rsync-command-examples-linux/
-alias rsc="rsync -zarvh --progress" 
+# alias rsc="rsync -zarvh --progress" 
 
 alias sz="source ~/.zshrc"
-# ---------------------
-# ========================================================================
 
-# ---------------------
+
+# ------------------------------------------
 # Setting Conda
-# ---------------------
+# ------------------------------------------
 # # github.com/conda/conda/issues/6826#issuecomment-397287212
 # # stackoverflow.com/questions/57660263/tmux-recognised-conda-env-but-still-use-the-default-python
 # source /sw/summit/ibm-wml-ce/anaconda-base/etc/profile.d/conda.sh
@@ -197,9 +212,9 @@ else
 fi
 
 
-# ---------------------
+# ------------------------------------------
 # FZF
-# ---------------------
+# ------------------------------------------
 # export FZF_DEFAULT_COMMAND='ag -u -g ""'
 # export FZF_DEFAULT_COMMAND="rg --files --hidden --follow --glob '!.git'"
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
