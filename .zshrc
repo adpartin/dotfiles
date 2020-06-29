@@ -115,8 +115,9 @@ alias uenv="module unload ibm-wml-ce/1.7.0-2"
 hn=`hostname -f`
 if [[ "${hn}" == *"olcf.ornl"* ]];
 then
-    alias med106="cd /ccs/proj/med106/apartin"
-    alias med110="cd /ccs/proj/med110/apartin"
+    alias md106="cd /ccs/proj/med106/apartin"
+    alias md110="cd /ccs/proj/med110/apartin"
+    alias gpfs="cd /gpfs/alpine/scratch/apartin"
 elif [[ "${hn}" == *"lambda"* ]];
     alias prj="cd /lambda_stor/data/apartin/projects"
 then
