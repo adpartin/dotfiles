@@ -142,9 +142,10 @@ set showtabline=2               " Show tab line
 set ttyfast             	    " Speed up scrolling in Vim
 
 " stackoverflow.com/questions/234564/tab-key-4-spaces-and-auto-indent-after-curly-braces-in-vim
-set tabstop=4                   " The number of spaces that a <Tab> counts for
-set shiftwidth=4                " Number of spaces to use for (auto) indent
+" set autoindent                " copy indent when starting a new line
 set expandtab                   " Expand tabs to spaces
+set shiftwidth=4                " Number of spaces to use for (auto) indent
+set tabstop=4                   " The number of spaces that a <Tab> counts for
 
 " -----------------------------------------------------------------------------
 "   Mappings
@@ -179,17 +180,20 @@ nnoremap <space> za
 " Press * to search for the term under the cursor or a visual selection and
 " then press a key below to replace all instances of it in the current file.
 " github.com/nickjj/dotfiles/blob/master/.vimrc
-nnoremap <Leader>r :%s///g<Left><Left>
-nnoremap <Leader>rc :%s///gc<Left><Left><Left>
+nnoremap <leader>r :%s///g<Left><Left>
+nnoremap <leader>rc :%s///gc<Left><Left><Left>
 
 " The same as above but instead of acting on the whole file it will be
 " restricted to the previously visually selected range. You can do that by
 " pressing *, visually selecting the range you want it to apply to and then
 " press a key below to replace all instances of it in the current selection.
 " github.com/nickjj/dotfiles/blob/master/.vimrc
-xnoremap <Leader>r :s///g<Left><Left>
-xnoremap <Leader>rc :s///gc<Left><Left><Left>
+xnoremap <leader>r :s///g<Left><Left>
+xnoremap <leader>rc :s///gc<Left><Left><Left>
 
+" Buffers
+ nnoremap <leader>k :bnext<cr>
+" nnoremap <leader>j :bprev<cr>
 
 " --------------------------------------
 " learnvimscriptthehardway.stevelosh.com
@@ -258,6 +262,9 @@ let g:lightline.active = {'right': [['lineinfo'], ['percent']]}
 " nnoremap <silent> <Leader>l :Lines<CR>
 
 " https://jesseleite.com/posts/2/its-dangerous-to-vim-alone-take-fzf
+nnoremap <leader>l :BLines<cr>
+nnoremap <leader>L :Lines<cr>
+nnoremap <leader>b :Buffers<cr>
 
 
 " -----------------------------------------------------------------------------
