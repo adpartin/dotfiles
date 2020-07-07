@@ -104,6 +104,12 @@ Plug 'christoomey/vim-tmux-navigator'
 Plug 'Vimjas/vim-python-pep8-indent'
 Plug 'tmhedberg/SimpylFold'
 
+" Coc
+" Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+" ALE
+Plug 'dense-analysis/ale'
+
 " Initialize plugin system
 call plug#end()
 " ===========================================================
@@ -112,6 +118,7 @@ call plug#end()
 let mapleader = ","
 
 " Colors
+" github.com/benizi/dotfiles/blob/master/.vim/vimrc
 syntax on  " syntax highlighting (similar to 'syndtax enable')
 set t_Co=256
 set background=dark
@@ -123,11 +130,13 @@ colorscheme solarized8
 " colorscheme onedark
 " colorscheme dracula
 
+
 " -----------------------------------------------------------------------------
 "   Basic Settings
 " -----------------------------------------------------------------------------
 set autoindent                  " Copy indent from current line on <cr>
 set backspace=indent,eol,start  " Sane backlspace vi.stackexchange.com/questions/2162/
+set cursorline                  " highlight cursorline
 set hlsearch                    " Highlight search results
 set laststatus=2                " Show statusbar all the time
 set matchpairs+=<:>     	    " Highlight matching pairs of brackets. Use '%' char to jump btw them.
@@ -136,7 +145,7 @@ set noshowmode                  " Don't show vim mode (use when lightline is use
 set number                      " Display line numbers
 set relativenumber              " Display relative line number
 set ruler                       " Show line number and column number
-set scrolloff=2                 " Keep at least 2 lines below cursor
+set scrolloff=3                 " Keep at least 2 lines below cursor
 set showmatch                   " Show matching brackets
 set showtabline=2               " Show tab line
 set ttyfast             	    " Speed up scrolling in Vim
@@ -146,6 +155,7 @@ set ttyfast             	    " Speed up scrolling in Vim
 set expandtab                   " Expand tabs to spaces
 set shiftwidth=4                " Number of spaces to use for (auto) indent
 set tabstop=4                   " The number of spaces that a <Tab> counts for
+
 
 " -----------------------------------------------------------------------------
 "   Mappings
@@ -165,7 +175,11 @@ nnoremap k gk
 inoremap jk <esc>
 inoremap kj <esc>
 
-" Map write file
+" Make Y behave as D
+" github.com/davidhalter/dotfiles/blob/master/.vimrc
+map Y y$
+
+" Map write (save) file
 inoremap <leader>w <esc>:w<cr>
 nnoremap <leader>w :w<cr>
 
@@ -192,7 +206,7 @@ xnoremap <leader>r :s///g<Left><Left>
 xnoremap <leader>rc :s///gc<Left><Left><Left>
 
 " Buffers
- nnoremap <leader>k :bnext<cr>
+" nnoremap <leader>k :bnext<cr>
 " nnoremap <leader>j :bprev<cr>
 
 " --------------------------------------
@@ -215,7 +229,7 @@ nnoremap K gg
 
 
 " -----------------------------------------------------------------------------
-"   Plugin configs
+"   Python indent
 " -----------------------------------------------------------------------------
 let g:python_pep8_indent_hang_closing=0 " TODO does it even work??
 
@@ -243,6 +257,58 @@ let g:lightline.active = {'right': [['lineinfo'], ['percent']]}
 " let g:lightline.component_expand = {'buffers': 'lightline#bufferline#buffers'}
 " let g:lightline.component_type   = {'buffers': 'tabsel'}
 
+
+" -----------------------------------------------------------------------------
+"   ALE configs
+" -----------------------------------------------------------------------------
+" Linting
+let g:ale_linters = {'python': ['flake8']}
+let g:ale_lint_on_enter = 0
+" can't enbale linting for a single buffer when ale_enabled=1
+" let g:ale_enabled = 0
+" let g:ale_lint_on_save = 1
+" Only run linters named in ale_linters settings.
+" let g:ale_linters_explicit = 1
+
+" Fixing
+let g:ale_fixers = {'*': ['remove_trailing_lines', 'trim_whitespace']} " work!
+" let g:ale_fixers = {'*': ['remove_trailing_lines', 'trim_whitespace'], 'python': ['black']} " does work!
+" let g:ale_fixers = {'*': ['remove_trailing_lines', 'trim_whitespace'], 'python': ['yapf']} " doesn't work!
+" let g:ale_fixers = {
+" \   '*': ['remove_trailing_lines', 'trim_whitespace'],
+" \   'python': ['yapf']
+" \}
+let g:ale_fix_on_save = 0
+
+" let g:ale_sign_warning = '▲'
+" let g:ale_sign_error = '✗'
+" let g:ale_sign_error = '•'
+" let g:ale_sign_warning = '•'
+
+" let g:ale_echo_msg_error_str = 'Error'  " 'E'
+" let g:ale_echo_msg_warning_str = 'Warning'  " 'W'
+
+" github.com/horseinthesky/dotfiles/blob/master/files/init.vim
+" ignore long-lines, import on top of the file, unused modules and statement with colon
+" let g:ale_python_flake8_options = '--ignore=E501,E402,F401,E701' 
+" ignore long-lines for autopep8 fixer
+" let g:ale_python_autopep8_options = '--ignore=E501'              
+
+" https://github.com/statico/dotfiles/blob/master/.vim/vimrc
+" https://yufanlu.net/2018/09/03/neovim-python/
+" Ale
+" let g:ale_lint_on_enter = 0
+" let g:ale_lint_on_text_changed = 'never'
+" let g:ale_echo_msg_error_str = 'E'
+" let g:ale_echo_msg_warning_str = 'W'
+" let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+" let g:ale_linters = {'python': ['flake8']}
+" " Airline
+" let g:airline_left_sep  = ''
+" let g:airline_right_sep = ''
+" let g:airline#extensions#ale#enabled = 1
+" let airline#extensions#ale#error_symbol = 'E:'
+" let airline#extensions#ale#warning_symbol = 'W:'
 
 " -----------------------------------------------------------------------------
 "   FZF
@@ -282,4 +348,3 @@ nnoremap <leader>= :wincmd =<cr>
 " I haven't tried this. See if I can also initiate a specific conda env.
 " Not sure why this doesn't open a new pane (??)
 " nnoremap <leader>py :VtrOpenRunner {'orientation': 'h', 'percentage': 50, 'cmd': 'python'}<cr>
-
