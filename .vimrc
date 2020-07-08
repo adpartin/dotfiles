@@ -263,10 +263,12 @@ let g:lightline.active = {'right': [['lineinfo'], ['percent']]}
 " -----------------------------------------------------------------------------
 " Linting
 let g:ale_linters = {'python': ['flake8']}
-let g:ale_lint_on_enter = 0
+let g:ale_lint_on_text_changed = 'never'
+" doesn't lint on ALEEnable! only when changes made
+let g:ale_lint_on_enter = 0 
 " can't enbale linting for a single buffer when ale_enabled=1
 " let g:ale_enabled = 0
-" let g:ale_lint_on_save = 1
+let g:ale_lint_on_save = 0
 " Only run linters named in ale_linters settings.
 " let g:ale_linters_explicit = 1
 
