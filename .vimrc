@@ -98,6 +98,9 @@ Plug 'lifepillar/vim-solarized8'
 Plug 'itchyny/lightline.vim'
 " Plug 'mengelbrecht/lightline-bufferline'
 
+Plug 'sheerun/vim-polyglot'
+
+" Tmux
 Plug 'christoomey/vim-tmux-navigator'
 " Plug 'christoomey/vim-tmux-runner'
 
