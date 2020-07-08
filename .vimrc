@@ -266,11 +266,10 @@ let g:lightline.active = {'right': [['lineinfo'], ['percent']]}
 " -----------------------------------------------------------------------------
 " Linting
 let g:ale_linters = {'python': ['flake8']}
-let g:ale_lint_on_text_changed = 'never'
-" doesn't lint on ALEEnable! only when changes made
-let g:ale_lint_on_enter = 0 
 " can't enbale linting for a single buffer when ale_enabled=1
 " let g:ale_enabled = 0
+let g:ale_lint_on_text_changed = 'never'
+let g:ale_lint_on_enter = 0 
 let g:ale_lint_on_save = 0
 " Only run linters named in ale_linters settings.
 " let g:ale_linters_explicit = 1
@@ -285,10 +284,19 @@ let g:ale_fixers = {'*': ['remove_trailing_lines', 'trim_whitespace']} " work!
 " \}
 let g:ale_fix_on_save = 0
 
-" let g:ale_sign_warning = '▲'
-" let g:ale_sign_error = '✗'
+" Remove background color in sign gutter for linting
+" https://github.com/dense-analysis/ale/issues/249
+highlight clear ALEErrorSign
+highlight clear ALEWarningSign
+
+let g:ale_sign_error = '✗'
 " let g:ale_sign_error = '•'
 " let g:ale_sign_warning = '•'
+" let g:ale_sign_warning = '▲'
+let g:ale_sign_warning = '.'
+
+" let g:ale_sign_error = '💣'
+" let g:ale_sign_warning = '⚠'
 
 " let g:ale_echo_msg_error_str = 'Error'  " 'E'
 " let g:ale_echo_msg_warning_str = 'Warning'  " 'W'
