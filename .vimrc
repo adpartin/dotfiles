@@ -276,9 +276,9 @@ let g:ale_lint_on_save = 0
 " let g:ale_linters_explicit = 1
 
 " Fixing
-" let g:ale_fixers = {'*': ['remove_trailing_lines', 'trim_whitespace']} " work!
+let g:ale_fixers = {'*': ['remove_trailing_lines', 'trim_whitespace']} " work!
 " let g:ale_fixers = {'*': ['remove_trailing_lines', 'trim_whitespace'], 'python': ['black']} " does work!
-let g:ale_fixers = {'*': ['remove_trailing_lines', 'trim_whitespace'], 'python': ['yapf']} " doesn't work!
+" let g:ale_fixers = {'*': ['remove_trailing_lines', 'trim_whitespace'], 'python': ['yapf']} " doesn't work!
 " let g:ale_fixers = {
 " \   '*': ['remove_trailing_lines', 'trim_whitespace'],
 " \   'python': ['yapf']
