@@ -165,7 +165,8 @@ set tabstop=4                   " The number of spaces that a <Tab> counts for
 " -----------------------------------------------------------------------------
 " Make double-<Esc> clear search highlights
 " vi.stackexchange.com/questions/8741/how-to-automatically-turn-off-hlsearch-after-im-done-searching
-nnoremap <esc><esc> :silent! nohls<cr>
+" nnoremap <esc><esc> :silent! nohls<cr>
+nnoremap <cr> :silent! nohls<cr>
 
 " Mappings in Normal mode
 " nnoremap 0 ^
@@ -275,9 +276,9 @@ let g:ale_lint_on_save = 0
 " let g:ale_linters_explicit = 1
 
 " Fixing
-let g:ale_fixers = {'*': ['remove_trailing_lines', 'trim_whitespace']} " work!
+" let g:ale_fixers = {'*': ['remove_trailing_lines', 'trim_whitespace']} " work!
 " let g:ale_fixers = {'*': ['remove_trailing_lines', 'trim_whitespace'], 'python': ['black']} " does work!
-" let g:ale_fixers = {'*': ['remove_trailing_lines', 'trim_whitespace'], 'python': ['yapf']} " doesn't work!
+let g:ale_fixers = {'*': ['remove_trailing_lines', 'trim_whitespace'], 'python': ['yapf']} " doesn't work!
 " let g:ale_fixers = {
 " \   '*': ['remove_trailing_lines', 'trim_whitespace'],
 " \   'python': ['yapf']

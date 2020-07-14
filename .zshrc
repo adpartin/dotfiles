@@ -25,8 +25,8 @@ fi
 # --------------------------------------------
 # Theme
 # github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="robbyrussell"
-# ZSH_THEME="gianu"
+# ZSH_THEME="robbyrussell"
+ZSH_THEME="gianu"
 # ZSH_THEME="avit"
 # ZSH_THEME="simple"
 
