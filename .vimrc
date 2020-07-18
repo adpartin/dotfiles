@@ -68,50 +68,56 @@ set nocompatible " Don't maintain compatibility with Vi. This must be first sinc
 " - Avoid using standard Vim directory names like 'plugin'
 call plug#begin('~/.vim/plugged')
 
-" Run ':TmuxNavigatorProcessList' to check vim-tmux-navigator is properly
-" installed. This plugin didn't work with minpac.
+" Tim Pope
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-fugitive'
-" Plug 'mhinz/vim-signify'
 
-" Integrate fzf with Vim.
+" FZF for Vim
 " Plugin outside ~/.vim/plugged with post-update hook
 " First, install github.com/junegunn/fzf using git
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 
-Plug 'vim-scripts/ReplaceWithRegister'
-Plug 'machakann/vim-highlightedyank'
+" NerdTree
+Plug 'preservim/nerdtree'
+" Plug 'Xuyuanp/nerdtree-git-plugin'
+" Plug 'ryanoasis/vim-devicons'
 
-" Colors
+" Visual
 Plug 'lifepillar/vim-solarized8'
 " Plug 'flazz/vim-colorschemes'
 " Plug 'sainnhe/forest-night'
 " Plug 'joshdick/onedark.vim'
 " Plug 'dracula/vim', { 'name': 'dracula' }
-" Plug 'sheerun/vim-polyglot'
+" Plug 'arcticicestudio/nord-vim'
+
+Plug 'machakann/vim-highlightedyank'
+Plug 'sheerun/vim-polyglot'
 
 " Plug 'vim-airline/vim-airline'
 " Plug 'vim-airline/vim-airline-themes'
 Plug 'itchyny/lightline.vim'
 " Plug 'mengelbrecht/lightline-bufferline'
 
-Plug 'sheerun/vim-polyglot'
-
 " Tmux
+" :TmuxNavigatorProcessList to check if vim-tmux-navigator is properly
 Plug 'christoomey/vim-tmux-navigator'
 " Plug 'christoomey/vim-tmux-runner'
 
-Plug 'Vimjas/vim-python-pep8-indent'
 Plug 'tmhedberg/SimpylFold'
 
 " Coc
+" I had problems with installing nodejs on remote machines.
 " Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " ALE
 Plug 'dense-analysis/ale'
+
+" Others
+Plug 'vim-scripts/ReplaceWithRegister'
+" Plug 'mhinz/vim-signify'
 
 " Initialize plugin system
 call plug#end()
@@ -132,6 +138,7 @@ colorscheme solarized8
 " colorscheme wombat
 " colorscheme onedark
 " colorscheme dracula
+" colorscheme nord
 
 
 " -----------------------------------------------------------------------------
@@ -166,7 +173,7 @@ set tabstop=4                   " The number of spaces that a <Tab> counts for
 " Make double-<Esc> clear search highlights
 " vi.stackexchange.com/questions/8741/how-to-automatically-turn-off-hlsearch-after-im-done-searching
 " nnoremap <esc><esc> :silent! nohls<cr>
-nnoremap <cr> :silent! nohls<cr>
+nnoremap \\ :silent! nohls<cr>
 
 " Mappings in Normal mode
 " nnoremap 0 ^
@@ -182,6 +189,9 @@ inoremap kj <esc>
 " Make Y behave as D
 " github.com/davidhalter/dotfiles/blob/master/.vimrc
 map Y y$
+
+" Redo with U
+nnoremap U <C-r>
 
 " Map write (save) file
 inoremap <leader>w <esc>:w<cr>
@@ -213,6 +223,13 @@ xnoremap <leader>rc :s///gc<Left><Left><Left>
 " nnoremap <leader>k :bnext<cr>
 " nnoremap <leader>j :bprev<cr>
 
+" NERDTree
+map = :NERDTreeToggle<CR>
+
+" ALE
+map <leader>g :ALEGoToDefinition<cr>
+
+
 " --------------------------------------
 " learnvimscriptthehardway.stevelosh.com
 " --------------------------------------
@@ -224,27 +241,34 @@ nnoremap L $
 nnoremap J G
 nnoremap K gg
 
-" Put text into python docstring in visual mode
-" vnoremap """ <esc>'<O"""<esc>'>o"""<esc>j^
 
-" iabbrev impd import pandas as pd
-" iabbrev imnp import numpy as np
-" iabbrev imsk import sklearn
+" -----------------------------------------------------------------------------
+"   Basic settings
+" -----------------------------------------------------------------------------
+let g:python_highlight_space_errors = 0  " disable reg line in polyglot
 
 
 " -----------------------------------------------------------------------------
-"   Python indent
+"   NERDTree
 " -----------------------------------------------------------------------------
-let g:python_pep8_indent_hang_closing=0 " TODO does it even work??
+let NERDTreeIgnore = ['\.pyc$', '\.pyo$']
+
+" Automatically close tree after file is opened from it
+let NERDTreeQuitOnOpen=1  " options: 0, 1, 2, 3
+
+" Sort files with numbers naturally
+let NERDTreeNaturalSort=1
+
+" Show hidden files by default
+let NERDTreeShowHidden=1
+
+" Automatically delete buffer when file is deleted from the tree explorer
+let NERDTreeAutoDeleteBuffer=1
 
 
 " -----------------------------------------------------------------------------
-"   Status line
+"   Status Line
 " -----------------------------------------------------------------------------
-" Airline
-" let g:airline_powerline_fonts = 1
-" let g:airline_theme = 'simple'
-
 " Lighline
 " github.com/statico/dotfiles/blob/202e30b23e5216ffb6526cce66a0ef4fa7070456/.vim/vimrc
 " let g:lightline#bufferline#show_number  = 1           " Buffer number as shown by the :ls command
@@ -263,26 +287,22 @@ let g:lightline.active = {'right': [['lineinfo'], ['percent']]}
 
 
 " -----------------------------------------------------------------------------
-"   ALE configs
+"   ALE Configs
 " -----------------------------------------------------------------------------
 " Linting
-let g:ale_linters = {'python': ['flake8']}
+let g:ale_linters = {'python': ['flake8', 'pyls']}
 " can't enbale linting for a single buffer when ale_enabled=1
 " let g:ale_enabled = 0
 let g:ale_lint_on_text_changed = 'never'
-let g:ale_lint_on_enter = 0 
+let g:ale_lint_on_enter = 0
 let g:ale_lint_on_save = 0
 " Only run linters named in ale_linters settings.
 " let g:ale_linters_explicit = 1
 
 " Fixing
 let g:ale_fixers = {'*': ['remove_trailing_lines', 'trim_whitespace']} " work!
-" let g:ale_fixers = {'*': ['remove_trailing_lines', 'trim_whitespace'], 'python': ['black']} " does work!
-" let g:ale_fixers = {'*': ['remove_trailing_lines', 'trim_whitespace'], 'python': ['yapf']} " doesn't work!
-" let g:ale_fixers = {
-" \   '*': ['remove_trailing_lines', 'trim_whitespace'],
-" \   'python': ['yapf']
-" \}
+" let g:ale_fixers = {'*': ['remove_trailing_lines', 'trim_whitespace'], 'python': ['black']}
+" let g:ale_fixers = {'*': ['remove_trailing_lines', 'trim_whitespace'], 'python': ['yapf']}
 let g:ale_fix_on_save = 0
 
 " Remove background color in sign gutter for linting
@@ -296,33 +316,33 @@ let g:ale_sign_error = '✗'
 " let g:ale_sign_warning = '▲'
 let g:ale_sign_warning = '.'
 
-" let g:ale_sign_error = '💣'
-" let g:ale_sign_warning = '⚠'
-
 " let g:ale_echo_msg_error_str = 'Error'  " 'E'
 " let g:ale_echo_msg_warning_str = 'Warning'  " 'W'
 
 " github.com/horseinthesky/dotfiles/blob/master/files/init.vim
 " ignore long-lines, import on top of the file, unused modules and statement with colon
-" let g:ale_python_flake8_options = '--ignore=E501,E402,F401,E701' 
+" let g:ale_python_flake8_options = '--ignore=E501,E402,F401,E701'
 " ignore long-lines for autopep8 fixer
-" let g:ale_python_autopep8_options = '--ignore=E501'              
+" let g:ale_python_autopep8_options = '--ignore=E501'
 
 " https://github.com/statico/dotfiles/blob/master/.vim/vimrc
 " https://yufanlu.net/2018/09/03/neovim-python/
 " Ale
-" let g:ale_lint_on_enter = 0
-" let g:ale_lint_on_text_changed = 'never'
-" let g:ale_echo_msg_error_str = 'E'
-" let g:ale_echo_msg_warning_str = 'W'
 " let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
-" let g:ale_linters = {'python': ['flake8']}
 " " Airline
 " let g:airline_left_sep  = ''
 " let g:airline_right_sep = ''
 " let g:airline#extensions#ale#enabled = 1
 " let airline#extensions#ale#error_symbol = 'E:'
 " let airline#extensions#ale#warning_symbol = 'W:'
+
+" Disable things (LSP, etc)
+" Completion is only supported while at least one LSP linter is enabled.
+" ALE integrates with Deoplete for offering automatic completion data.
+" let g:ale_completion_enabled=0  " code completion (default=0)
+" let g:ale_disable_lsp=1         " ignore linters powered by lsp and also tsserver (default=0)
+" let g:ale_update_tagstack=0  " go to definition
+
 
 " -----------------------------------------------------------------------------
 "   FZF
