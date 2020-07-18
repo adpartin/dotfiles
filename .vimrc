@@ -1,66 +1,6 @@
 set nocompatible " Don't maintain compatibility with Vi. This must be first since it changes other options
 
-" " ===========================================================
-" "  Vundle settings
-" " -----------------------
-" " required by Vundle stackoverflow.com/questions/14642956/
-" filetype off
-
-" " set runtime path to include Vundle and initialize
-" set rtp+=~/.vim/bundle/Vundle.vim
-" call vundle#begin()
-" " or, pass a path where Vundle should install plugins
-" " call vundle#begin('~/some/path/here')
-
-" " let Vundle manage Vundle, required
-" Plugin 'VundleVim/Vundle.vim'
-
-" " Run ':TmuxNavigatorProcessList' to check vim-tmux-navigator is properly
-" " installed. This plugin didn't work with minpac.
-" Plugin 'tpope/vim-commentary'
-" Plugin 'tpope/vim-repeat'
-" Plugin 'tpope/vim-surround'
-" Plugin 'tpope/vim-fugitive'
-
-" " Integrate fzf with Vim.
-" " First, install github.com/junegunn/fzf using git
-" Plugin 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-" Plugin 'junegunn/fzf.vim'
-
-" Plugin 'vim-scripts/ReplaceWithRegister'
-" Plugin 'machakann/vim-highlightedyank'
-
-" " Colors
-" Plugin 'lifepillar/vim-solarized8'
-" " Plugin 'dracula/vim', { 'name': 'dracula' }
-
-" " Plugin 'vim-airline/vim-airline'
-" " Plugin 'vim-airline/vim-airline-themes'
-" Plugin 'itchyny/lightline.vim'
-" " Plugin 'mengelbrecht/lightline-bufferline'
-
-" Plugin 'christoomey/vim-tmux-navigator'
-" Plugin 'christoomey/vim-tmux-runner'
-
-" Plugin 'Vimjas/vim-python-pep8-indent'
-" Plugin 'tmhedberg/SimpylFold'
-
-" " All of your Plugins must be added before the following line
-" call vundle#end()            " required
-
-" " required by Vundle; allow plugins by file type
-" filetype plugin indent on
-
-" " Brief help
-" " :PluginList       - lists configured plugins
-" " :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
-" " :PluginSearch foo - searches for foo; append `!` to refresh local cache
-" " :PluginClean      - confirms removal of unused plugins; append `!` to  auto-approve removal
-" " see :h vundle for more details or wiki for FAQ
-" " Put your non-Plugin stuff after this line
-" " ===========================================================
-
-" ===========================================================
+" ======================================
 "  vim-plug settings
 " -----------------------
 " Specify a directory for plugins
@@ -121,7 +61,7 @@ Plug 'vim-scripts/ReplaceWithRegister'
 
 " Initialize plugin system
 call plug#end()
-" ===========================================================
+" ======================================
 
 " https://pybit.es/vim-tricks.html
 let mapleader = ","
