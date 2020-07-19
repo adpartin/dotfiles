@@ -70,6 +70,9 @@ let mapleader = ","
 " github.com/benizi/dotfiles/blob/master/.vim/vimrc
 syntax on  " syntax highlighting (similar to 'syndtax enable')
 set t_Co=256
+" if has( "termguicolors" )
+"     set termguicolors
+" endif
 set background=dark
 colorscheme solarized8
 " colorscheme forest-night
@@ -100,7 +103,7 @@ set showmatch                   " Show matching brackets
 set showtabline=2               " Show tab line
 set ttyfast             	    " Speed up scrolling in Vim
 
-" stackoverflow.com/questions/234564/tab-key-4-spaces-and-auto-indent-after-curly-braces-in-vim
+" stackoverflow.com/questions/234564
 " set autoindent                " copy indent when starting a new line
 set expandtab                   " Expand tabs to spaces
 set shiftwidth=4                " Number of spaces to use for (auto) indent
@@ -110,10 +113,10 @@ set tabstop=4                   " The number of spaces that a <Tab> counts for
 " -----------------------------------------------------------------------------
 "   Mappings
 " -----------------------------------------------------------------------------
-" Make double-<Esc> clear search highlights
-" vi.stackexchange.com/questions/8741/how-to-automatically-turn-off-hlsearch-after-im-done-searching
+" Clear search highlights
+" vi.stackexchange.com/questions/8741
 " nnoremap <esc><esc> :silent! nohls<cr>
-nnoremap \\ :silent! nohls<cr>
+nnoremap \\ :silent! nohls<CR>
 
 " Mappings in Normal mode
 " nnoremap 0 ^
@@ -123,8 +126,8 @@ nnoremap j gj
 nnoremap k gk
 
 " Map Esc
-inoremap jk <esc>
-inoremap kj <esc>
+inoremap jk <ESC>
+inoremap kj <ESC>
 
 " Make Y behave as D
 " github.com/davidhalter/dotfiles/blob/master/.vimrc
@@ -134,52 +137,58 @@ map Y y$
 nnoremap U <C-r>
 
 " Map write (save) file
-inoremap <leader>w <esc>:w<cr>
-nnoremap <leader>w :w<cr>
+inoremap <Leader>w <ESC>:w<CR>
+nnoremap <Leader>w :w<CR>
 
 " Map quit file
-inoremap <leader>q <esc>:q<cr>
-nnoremap <leader>q :q<cr>
+inoremap <Leader>q <ESC>:q<CR>
+nnoremap <Leader>q :q<CR>
 
 " Map fold code; TODO: how to unbind za
-nnoremap <space> za
+nnoremap <Space> za
 " nnoremap <leader>z zMzvzz
 
 " Press * to search for the term under the cursor or a visual selection and
 " then press a key below to replace all instances of it in the current file.
 " github.com/nickjj/dotfiles/blob/master/.vimrc
-nnoremap <leader>r :%s///g<Left><Left>
-nnoremap <leader>rc :%s///gc<Left><Left><Left>
+nnoremap <Leader>r :%s///g<Left><Left>
+nnoremap <Leader>rc :%s///gc<Left><Left><Left>
 
 " The same as above but instead of acting on the whole file it will be
 " restricted to the previously visually selected range. You can do that by
 " pressing *, visually selecting the range you want it to apply to and then
 " press a key below to replace all instances of it in the current selection.
 " github.com/nickjj/dotfiles/blob/master/.vimrc
-xnoremap <leader>r :s///g<Left><Left>
-xnoremap <leader>rc :s///gc<Left><Left><Left>
+xnoremap <Leader>r :s///g<Left><Left>
+xnoremap <Leader>rc :s///gc<Left><Left><Left>
 
 " Buffers
-" nnoremap <leader>k :bnext<cr>
-" nnoremap <leader>j :bprev<cr>
+" nnoremap <Leader>n :enew<CR>  " new buffer
+nnoremap <Tab> :bnext<CR>         " next buffer
+nnoremap <S-Tab> :bprev<CR>       " previous buffer
+nnoremap <Leader><Space> :b#<CR>  " recent buffer
+" nnoremap <Leader>a :only<CR>  " only buffer
+nnoremap Q :bd!<CR>               " close buffer
 
 " NERDTree
-map = :NERDTreeToggle<CR>
+map <C-n> :NERDTreeToggle<CR>
 
 " ALE
-map <leader>g :ALEGoToDefinition<cr>
+map <Leader>g :ALEGoToDefinition<CR>
 
 
 " --------------------------------------
 " learnvimscriptthehardway.stevelosh.com
 " --------------------------------------
-nnoremap <leader>ev :vsplit $MYVIMRC<cr>
-nnoremap <leader>sv :source $MYVIMRC<cr>
+nnoremap <Leader>ev :vsplit $MYVIMRC<CR>
+nnoremap <Leader>sv :source $MYVIMRC<CR>
 
 nnoremap H ^
 nnoremap L $
-nnoremap J G
-nnoremap K gg
+" nnoremap J G
+" nnoremap K gg
+nnoremap J 5j
+nnoremap K 5k
 
 
 " -----------------------------------------------------------------------------
@@ -292,7 +301,7 @@ let g:ale_sign_warning = '.'
 " inoremap <C-f> <Esc><Esc>:BLines!<CR>
 " noremap <C-g> <Esc><Esc>:BCommits!<CR>
 " Bat Preview Theme
-" let $BAT_THEME = 'Solarized (dark)'
+let $BAT_THEME = 'Solarized (dark)'
 " Let FZF find hidden files and folders
 " let $FZF_DEFAULT_COMMAND='find . -not -path "*/\.git*" -type f -print'
 
@@ -302,9 +311,10 @@ let g:ale_sign_warning = '.'
 " nnoremap <silent> <Leader>l :Lines<CR>
 
 " https://jesseleite.com/posts/2/its-dangerous-to-vim-alone-take-fzf
-nnoremap <leader>l :BLines<cr>
-nnoremap <leader>L :Lines<cr>
-nnoremap <leader>b :Buffers<cr>
+nnoremap <silent> <C-f> :Files!<CR>
+nnoremap <silent> <Leader>l :BLines<CR>
+nnoremap <silent> <Leader>L :Lines<CR>
+nnoremap <silent> <Leader>b :Buffers<CR>
 
 
 " -----------------------------------------------------------------------------
@@ -315,8 +325,8 @@ autocmd VimResized * :wincmd =
 
 " zoom a vim pane, <C-w>= to re-balance
 " (ap) this doesn't work (?!)
-nnoremap <leader>~ :wincmd _<cr>:wincmd \|<cr>
-nnoremap <leader>= :wincmd =<cr>
+nnoremap <Leader>~ :wincmd _<CR>:wincmd \|<CR>
+nnoremap <Leader>= :wincmd =<CR>
 
 " thoughtbot.com/upcase/videos/tmux-vim-integration
 " I haven't tried this. See if I can also initiate a specific conda env.

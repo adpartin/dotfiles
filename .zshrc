@@ -215,8 +215,15 @@ fi
 # ------------------------------------------
 # FZF
 # ------------------------------------------
-# export FZF_DEFAULT_COMMAND='ag -u -g ""'
-# export FZF_DEFAULT_COMMAND="rg --files --hidden --follow --glob '!.git'"
+## export FZF_DEFAULT_COMMAND='ag -u -g ""'
+## export FZF_DEFAULT_COMMAND="rg --files --hidden --follow --glob '!.git'"
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
+# github.com/horseinthesky/dotfiles/blob/master/files/.zshrc
+# if [[ -f "$HOME/.fzf.zsh" ]]; then
+#     [[ -f ~/.fzf.zsh ]] && source ~/.fzf.zsh
+#     export FZF_DEFAULT_COMMAND='. --type file --follow --hidden --exclude .git'
+#     export FZF_DEFAULT_OPTS="--extended"
+#     export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+# fi
 
