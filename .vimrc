@@ -200,7 +200,7 @@ let g:python_highlight_space_errors = 0  " disable reg line in polyglot
 " -----------------------------------------------------------------------------
 "   NERDTree
 " -----------------------------------------------------------------------------
-let NERDTreeIgnore = ['\.pyc$', '\.pyo$']
+let NERDTreeIgnore = ['\.pyc$', '\.pyo$', '__pycache__', '.ipynb_checkpoints']
 
 " Automatically close tree after file is opened from it
 let NERDTreeQuitOnOpen=1  " options: 0, 1, 2, 3
