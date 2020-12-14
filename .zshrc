@@ -43,6 +43,8 @@ plugins=(
     git
     zsh-syntax-highlighting
     zsh-autosuggestions
+    docker
+    docker-compose
 )
 # fzf
 # --------------------------------------------
