@@ -59,6 +59,10 @@ Plug 'dense-analysis/ale'
 Plug 'vim-scripts/ReplaceWithRegister'
 " Plug 'mhinz/vim-signify'
 
+" Python cell execution
+Plug 'jpalardy/vim-slime', { 'for': 'python' }
+Plug 'hanschen/vim-ipython-cell', { 'for': 'python' }
+
 " Initialize plugin system
 call plug#end()
 " ======================================
@@ -291,6 +295,22 @@ let g:ale_sign_warning = '.'
 " let g:ale_completion_enabled=0  " code completion (default=0)
 " let g:ale_disable_lsp=1         " ignore linters powered by lsp and also tsserver (default=0)
 " let g:ale_update_tagstack=0  " go to definition
+
+
+" -----------------------------------------------------------------------------
+"   Slime Configs
+" -----------------------------------------------------------------------------
+" always use tmux
+let g:slime_target = 'tmux'
+
+" fix paste issues in ipython
+let g:slime_python_ipython = 1
+
+" always send text to the top-right pane in the current tmux tab without asking
+let g:slime_default_config = {
+            \ 'socket_name': get(split($TMUX, ','), 0),
+            \ 'target_pane': '{top-right}' }
+let g:slime_dont_ask_default = 1
 
 
 " -----------------------------------------------------------------------------
