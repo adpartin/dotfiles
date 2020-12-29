@@ -67,6 +67,9 @@ Plug 'vim-scripts/ReplaceWithRegister'
 Plug 'jpalardy/vim-slime', { 'for': 'python' }
 Plug 'hanschen/vim-ipython-cell', { 'for': 'python' }
 
+" VimWiki
+Plug 'vimwiki/vimwiki'
+
 " Initialize plugin system
 call plug#end()
 " ======================================
@@ -213,6 +216,12 @@ nnoremap K 5k
 "   Basic settings
 " -----------------------------------------------------------------------------
 let g:python_highlight_space_errors = 0  " disable reg line in polyglot
+
+
+" -----------------------------------------------------------------------------
+"   VimWiki
+" -----------------------------------------------------------------------------
+let g:vimwiki_list = [{'path': '~/vimwiki/', 'syntax': 'markdown', 'ext': '.md'}]
 
 
 " -----------------------------------------------------------------------------
