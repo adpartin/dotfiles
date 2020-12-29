@@ -29,8 +29,8 @@ Plug 'ryanoasis/vim-devicons'
 " Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 
 " Visual
-Plug 'lifepillar/vim-solarized8'
-" Plug 'morhetz/gruvbox'
+" Plug 'lifepillar/vim-solarized8'
+Plug 'morhetz/gruvbox'
 " Plug 'flazz/vim-colorschemes'
 " Plug 'sainnhe/forest-night'
 " Plug 'joshdick/onedark.vim'
@@ -67,8 +67,10 @@ Plug 'vim-scripts/ReplaceWithRegister'
 Plug 'jpalardy/vim-slime', { 'for': 'python' }
 Plug 'hanschen/vim-ipython-cell', { 'for': 'python' }
 
-" VimWiki
+" Notes
 Plug 'vimwiki/vimwiki'
+Plug 'godlygeek/tabular'
+Plug 'plasticboy/vim-markdown'
 
 " Initialize plugin system
 call plug#end()
@@ -90,9 +92,12 @@ set termguicolors
 "     set termguicolors
 " endif
 
+" This must come before the gruvbox is definded
+let g:gruvbox_italic=1
+
 set background=dark
-colorscheme solarized8
-" colorscheme gruvbox
+" colorscheme solarized8
+colorscheme gruvbox
 " colorscheme forest-night
 " colorscheme molokai
 " colorscheme dessert
@@ -101,8 +106,10 @@ colorscheme solarized8
 " colorscheme dracula
 " colorscheme nord
 
-" problem: when enabled, the commented text is highlighted(??)
-" let g:gruvbox_italic=1
+" (!) Required to show italic in vim markdown.
+" https://github.com/morhetz/gruvbox/issues/119
+let &t_ZH="\e[3m"
+let &t_ZR="\e[23m"
 
 
 " -----------------------------------------------------------------------------
@@ -110,8 +117,9 @@ colorscheme solarized8
 " -----------------------------------------------------------------------------
 set autoindent                  " Copy indent from current line on <cr>
 set backspace=indent,eol,start  " Sane backlspace vi.stackexchange.com/questions/2162/
-set conceallevel=2
+set conceallevel=2              " italic, bold, 
 set cursorline                  " highlight cursorline
+set encoding=UTF-8
 set hlsearch                    " Highlight search results
 set laststatus=2                " Show statusbar all the time
 set matchpairs+=<:>     	    " Highlight matching pairs of brackets. Use '%' char to jump btw them.
