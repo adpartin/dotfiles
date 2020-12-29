@@ -1,4 +1,5 @@
 set nocompatible " Don't maintain compatibility with Vi. This must be first since it changes other options
+filetype plugin on
 
 " ======================================
 "  vim-plug settings
@@ -21,12 +22,15 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 
 " NerdTree
+" Need to install nerdfonts and use Nerd Font as the font
 Plug 'preservim/nerdtree'
 " Plug 'Xuyuanp/nerdtree-git-plugin'
-" Plug 'ryanoasis/vim-devicons'
+Plug 'ryanoasis/vim-devicons'
+" Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 
 " Visual
-Plug 'lifepillar/vim-solarized8'
+" Plug 'lifepillar/vim-solarized8'
+Plug 'morhetz/gruvbox'
 " Plug 'flazz/vim-colorschemes'
 " Plug 'sainnhe/forest-night'
 " Plug 'joshdick/onedark.vim'
@@ -73,12 +77,19 @@ let mapleader = ","
 " Colors
 " github.com/benizi/dotfiles/blob/master/.vim/vimrc
 syntax on  " syntax highlighting (similar to 'syndtax enable')
-set t_Co=256
-" if has( "termguicolors" )
+
+" set t_Co=256
+
+let &t_8f="\<Esc>[38;2;%lu;%lu;%lum"
+let &t_8b="\<Esc>[48;2;%lu;%lu;%lum"
+set termguicolors
+" if has( 'termguicolors' )
 "     set termguicolors
 " endif
+
 set background=dark
-colorscheme solarized8
+" colorscheme solarized8
+colorscheme gruvbox
 " colorscheme forest-night
 " colorscheme molokai
 " colorscheme dessert
@@ -86,6 +97,9 @@ colorscheme solarized8
 " colorscheme onedark
 " colorscheme dracula
 " colorscheme nord
+
+" problem: when enabled, the commented text is highlighted(??)
+" let g:gruvbox_italic=1
 
 
 " -----------------------------------------------------------------------------
