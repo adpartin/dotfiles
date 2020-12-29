@@ -30,6 +30,9 @@ ZSH_THEME="gianu"
 # ZSH_THEME="avit"
 # ZSH_THEME="simple"
 
+export TERM=xterm-256color
+# export TERM=xterm-256color-italic
+
 # --------------------------------------------
 # Plugins
 # --------------------------------------------
@@ -50,6 +53,7 @@ plugins=(
 # --------------------------------------------
 
 source $ZSH/oh-my-zsh.sh
+
 
 # ========================================================================
 # Set personal aliases, overriding those provided by oh-my-zsh libs,
