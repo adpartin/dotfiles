@@ -29,8 +29,8 @@ Plug 'ryanoasis/vim-devicons'
 " Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 
 " Visual
-" Plug 'lifepillar/vim-solarized8'
-Plug 'morhetz/gruvbox'
+Plug 'lifepillar/vim-solarized8'
+" Plug 'morhetz/gruvbox'
 " Plug 'flazz/vim-colorschemes'
 " Plug 'sainnhe/forest-night'
 " Plug 'joshdick/onedark.vim'
@@ -75,7 +75,7 @@ call plug#end()
 " ======================================
 
 " https://pybit.es/vim-tricks.html
-let mapleader = ","
+let mapleader = ','
 
 " Colors
 " github.com/benizi/dotfiles/blob/master/.vim/vimrc
@@ -91,8 +91,8 @@ set termguicolors
 " endif
 
 set background=dark
-" colorscheme solarized8
-colorscheme gruvbox
+colorscheme solarized8
+" colorscheme gruvbox
 " colorscheme forest-night
 " colorscheme molokai
 " colorscheme dessert
@@ -110,6 +110,7 @@ colorscheme gruvbox
 " -----------------------------------------------------------------------------
 set autoindent                  " Copy indent from current line on <cr>
 set backspace=indent,eol,start  " Sane backlspace vi.stackexchange.com/questions/2162/
+set conceallevel=2
 set cursorline                  " highlight cursorline
 set hlsearch                    " Highlight search results
 set laststatus=2                " Show statusbar all the time
