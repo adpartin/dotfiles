@@ -94,6 +94,7 @@ set termguicolors
 
 " This must come before the gruvbox is definded
 let g:gruvbox_italic=1
+" let g:gruvbox_contrast_dark = 'soft'
 
 set background=dark
 " colorscheme solarized8
