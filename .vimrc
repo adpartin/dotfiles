@@ -364,10 +364,15 @@ let $BAT_THEME = 'Solarized (dark)'
 " nnoremap <silent> <Leader>l :Lines<CR>
 
 " https://jesseleite.com/posts/2/its-dangerous-to-vim-alone-take-fzf
-nnoremap <silent> <C-f> :Files!<CR>
-nnoremap <silent> <Leader>l :BLines<CR>
-nnoremap <silent> <Leader>L :Lines<CR>
+" Lines: lines in loaded buffers
+" BLines: lines in the current buffer
+" Files: search files
+" GFiles: git ls-files
+" GFiles?: git status
+nnoremap <silent> <C-f> :Files<CR>
 nnoremap <silent> <Leader>b :Buffers<CR>
+nnoremap <silent> <Leader>L :Lines<CR>
+nnoremap <silent> <Leader>l :BLines<CR>
 
 
 " -----------------------------------------------------------------------------

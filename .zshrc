@@ -158,6 +158,7 @@ alias codea="conda deactivate"
 # alias rsc="rsync -zarvh --progress" 
 
 alias sz="source ~/.zshrc"
+alias vw="vim -c ':VimwikiIndex'"
 
 
 # ------------------------------------------
