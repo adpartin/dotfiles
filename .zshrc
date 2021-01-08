@@ -160,6 +160,9 @@ alias codea="conda deactivate"
 alias sz="source ~/.zshrc"
 alias vw="vim -c ':VimwikiIndex'"
 
+# Neovim
+alias nvim="./nvim.appimage"
+
 
 # ------------------------------------------
 # Setting Conda
