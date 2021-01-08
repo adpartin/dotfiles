@@ -118,6 +118,7 @@ let &t_ZR="\e[23m"
 " -----------------------------------------------------------------------------
 set autoindent                  " Copy indent from current line on <cr>
 set backspace=indent,eol,start  " Sane backlspace vi.stackexchange.com/questions/2162/
+set belloff=all
 set conceallevel=2              " italic, bold, 
 set cursorline                  " highlight cursorline
 set encoding=UTF-8
@@ -201,11 +202,28 @@ nnoremap <Leader><Space> :b#<CR>  " recent buffer
 " nnoremap <Leader>a :only<CR>  " only buffer
 nnoremap Q :bd!<CR>               " close buffer
 
+" ALE
+map <Leader>g :ALEGoToDefinition<CR>
+
 " NERDTree
 map <C-n> :NERDTreeToggle<CR>
 
-" ALE
-map <Leader>g :ALEGoToDefinition<CR>
+" FZF
+" github.com/nickjj/dotfiles/blob/master/.vimrc
+" https://jesseleite.com/posts/2/its-dangerous-to-vim-alone-take-fzf
+" Lines: lines in loaded buffers
+" BLines: lines in the current buffer
+" Files: search files
+" GFiles: git ls-files
+" GFiles?: git status
+nnoremap <silent> <C-f> :Files<CR>
+nnoremap <silent> <Leader>b :Buffers<CR>
+nnoremap <silent> <Leader>L :Lines<CR>
+nnoremap <silent> <Leader>l :BLines<CR>
+
+" Vimwiki
+" nnoremap <Leader>wi :VimwikiIndex<CR>
+nnoremap <Leader>wf :VWS //<Left>
 
 
 " --------------------------------------
@@ -218,14 +236,14 @@ nnoremap H ^
 nnoremap L $
 " nnoremap J G
 " nnoremap K gg
-nnoremap J 5j
-nnoremap K 5k
+nnoremap J 7j
+nnoremap K 7k
 
 
 " -----------------------------------------------------------------------------
 "   Basic settings
 " -----------------------------------------------------------------------------
-let g:python_highlight_space_errors = 0  " disable reg line in polyglot
+let g:python_highlight_space_errors = 0  " disable red line in polyglot
 
 
 " -----------------------------------------------------------------------------
@@ -286,7 +304,7 @@ let g:ale_lint_on_save = 0
 " let g:ale_linters_explicit = 1
 
 " Fixing
-let g:ale_fixers = {'*': ['remove_trailing_lines', 'trim_whitespace']} " work!
+let g:ale_fixers = {'*': ['remove_trailing_lines', 'trim_whitespace']} " works!
 " let g:ale_fixers = {'*': ['remove_trailing_lines', 'trim_whitespace'], 'python': ['black']}
 " let g:ale_fixers = {'*': ['remove_trailing_lines', 'trim_whitespace'], 'python': ['yapf']}
 let g:ale_fix_on_save = 0
@@ -327,7 +345,7 @@ let g:ale_sign_warning = '.'
 " ALE integrates with Deoplete for offering automatic completion data.
 " let g:ale_completion_enabled=0  " code completion (default=0)
 " let g:ale_disable_lsp=1         " ignore linters powered by lsp and also tsserver (default=0)
-" let g:ale_update_tagstack=0  " go to definition
+" let g:ale_update_tagstack=0     " go to definition
 
 
 " -----------------------------------------------------------------------------
@@ -349,35 +367,16 @@ let g:slime_dont_ask_default = 1
 " -----------------------------------------------------------------------------
 "   FZF
 " -----------------------------------------------------------------------------
-" github.com/tallguyjenks/.dotfiles/blob/master/nvim/.config/nvim/init.vim
-" noremap <C-f> <Esc><Esc>:Files!<CR>
-" inoremap <C-f> <Esc><Esc>:BLines!<CR>
-" noremap <C-g> <Esc><Esc>:BCommits!<CR>
 " Bat Preview Theme
 let $BAT_THEME = 'Solarized (dark)'
 " Let FZF find hidden files and folders
 " let $FZF_DEFAULT_COMMAND='find . -not -path "*/\.git*" -type f -print'
 
-" github.com/nickjj/dotfiles/blob/master/.vimrc
-" nnoremap <silent> <C-p> :FZF -m<CR>
-" nnoremap <silent> <Leader><Enter> :Buffers<CR>
-" nnoremap <silent> <Leader>l :Lines<CR>
 
-" https://jesseleite.com/posts/2/its-dangerous-to-vim-alone-take-fzf
-" Lines: lines in loaded buffers
-" BLines: lines in the current buffer
-" Files: search files
-" GFiles: git ls-files
-" GFiles?: git status
-nnoremap <silent> <C-f> :Files<CR>
-nnoremap <silent> <Leader>b :Buffers<CR>
-nnoremap <silent> <Leader>L :Lines<CR>
-nnoremap <silent> <Leader>l :BLines<CR>
-
-
+" -----------------------------------------------------------------------------
+" Complex settings
 " -----------------------------------------------------------------------------
 " https://thoughtbot.com/upcase/videos/tmux-vim-integration
-" -----------------------------------------------------------------------------
 " automatically rebalance windows on vim resize
 autocmd VimResized * :wincmd =
 
@@ -390,3 +389,11 @@ nnoremap <Leader>= :wincmd =<CR>
 " I haven't tried this. See if I can also initiate a specific conda env.
 " Not sure why this doesn't open a new pane (??)
 " nnoremap <leader>py :VtrOpenRunner {'orientation': 'h', 'percentage': 50, 'cmd': 'python'}<cr>
+
+" When switching buffers, preserve window view.
+" stackoverflow.com/questions/18048944
+if v:version >= 700
+   au BufLeave * if !&diff | let b:winview = winsaveview() | endif
+   au BufEnter * if exists('b:winview') && !&diff | call   winrestview(b:winview) | endif
+endif
+
