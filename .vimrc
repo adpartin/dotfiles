@@ -166,7 +166,12 @@ inoremap kj <ESC>
 map Y y$
 
 " Redo with U
-nnoremap U <C-r>
+" nnoremap U <C-r>
+
+" Uppercase
+nnoremap <Leader>u gUiwe
+inoremap <Leader>u <ESC>gUiwea
+
 
 " Map write (save) file
 inoremap <Leader>w <ESC>:w<CR>
@@ -236,8 +241,8 @@ nnoremap H ^
 nnoremap L $
 " nnoremap J G
 " nnoremap K gg
-nnoremap J 7j
-nnoremap K 7k
+nnoremap J 5j
+nnoremap K 5k
 
 
 " -----------------------------------------------------------------------------
@@ -343,9 +348,13 @@ let g:ale_sign_warning = '.'
 " Disable things (LSP, etc)
 " Completion is only supported while at least one LSP linter is enabled.
 " ALE integrates with Deoplete for offering automatic completion data.
-" let g:ale_completion_enabled=0  " code completion (default=0)
+let g:ale_completion_enabled=1  " code completion (default=0)
 " let g:ale_disable_lsp=1         " ignore linters powered by lsp and also tsserver (default=0)
 " let g:ale_update_tagstack=0     " go to definition
+
+" Disable auto-detection of virtualenvironments
+" https://github.com/dense-analysis/ale/issues/3052
+let g:ale_virtualenv_dir_names = []
 
 
 " -----------------------------------------------------------------------------
