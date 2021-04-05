@@ -147,7 +147,8 @@ set tabstop=4                   " The number of spaces that a <Tab> counts for
 " -----------------------------------------------------------------------------
 " Clear search highlights
 " vi.stackexchange.com/questions/8741
-nnoremap <ESC><ESC> :silent! nohls<cr>
+" nnoremap <ESC><ESC> :silent! nohls<cr>
+nnoremap <CR> :silent! nohls<CR>
 " nnoremap \\ :silent! nohls<CR>
 
 " Mappings in Normal mode
