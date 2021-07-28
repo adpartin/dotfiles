@@ -300,7 +300,27 @@ let g:lightline.active = {'right': [['lineinfo'], ['percent']]}
 "   ALE Configs
 " -----------------------------------------------------------------------------
 " Linting
-let g:ale_linters = {'python': ['flake8', 'pyls']}
+" let g:ale_linters = {'python': ['flake8', 'pyls']}
+let g:ale_linters = {'python': ['flake8', 'pylsp']}
+
+" https://github.com/dense-analysis/ale/issues/3722
+let g:ale_python_pyls_executable = "pylsp"
+let g:ale_python_pyls_config = {
+\   'pylsp': {
+\     'plugins': {
+\       'pycodestyle': {
+\         'enabled': v:false,
+\       },
+\       'pyflakes': {
+\         'enabled': v:false,
+\       },
+\       'pydocstyle': {
+\         'enabled': v:false,
+\       },
+\     },
+\   },
+\}
+
 " can't enbale linting for a single buffer when ale_enabled=1
 " let g:ale_enabled = 0
 let g:ale_lint_on_text_changed = 'never'
