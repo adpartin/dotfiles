@@ -178,7 +178,7 @@ sys_name=`uname -a`
 if [[ "${hn}" == *"olcf.ornl"* ]]
 then
     # echo "You are on ${hn}"
-    source /sw/summit/ibm-wml-ce/anaconda-base/etc/profile.d/conda.sh
+    # source /sw/summit/ibm-wml-ce/anaconda-base/etc/profile.d/conda.sh  # commented out by conda initialize
     [[ -z $TMUX ]] || conda deactivate; conda activate base
 
 elif [[ "${sys_name}" == *"Darwin"* ]]
@@ -199,7 +199,7 @@ then
     # unset __conda_setup
     # # <<< conda initialize <<<
 
-    source /Users/apartin/miniconda3/etc/profile.d/conda.sh
+    # source /Users/apartin/miniconda3/etc/profile.d/conda.sh  # commented out by conda initialize
     [[ -z $TMUX ]] || conda deactivate; conda activate base
 
 else
@@ -212,9 +212,9 @@ else
         eval "$__conda_setup"
     else
         if [ -f "/homes/apartin/miniconda3/etc/profile.d/conda.sh" ]; then
-            . "/homes/apartin/miniconda3/etc/profile.d/conda.sh"
+            # . "/homes/apartin/miniconda3/etc/profile.d/conda.sh"  # commented out by conda initialize
         else
-            export PATH="/homes/apartin/miniconda3/bin:$PATH"
+            # export PATH="/homes/apartin/miniconda3/bin:$PATH"  # commented out by conda initialize
         fi
     fi
     unset __conda_setup
@@ -237,3 +237,5 @@ fi
 #     export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 # fi
 
+# Prevent duplicates of PATH variables
+typeset -U PATH
