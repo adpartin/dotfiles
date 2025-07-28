@@ -1,68 +1,51 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
+emulate -R zsh  # ensure native zsh mode
 
 # ---------------------
 # Determine system
 # ---------------------
-hn=`hostname -f`
-sys_name=`uname -a`
+HOSTNAME=`hostname -f`
+SYSTEM_NAME=`uname -a`
 
-if [[ "${hn}" == *"olcf.ornl"* ]]
+if [[ "${HOSTNAME}" == *"olcf.ornl"* ]]
 then
-    # echo "You are on ${hn}"
-    export ZSH="/ccs/home/apartin/.oh-my-zsh"
-elif [[ "${sys_name}" == *"Darwin"* ]]
+    # echo "You are on ${HOSTNAME}"
+    # export ZSH="/ccs/home/apartin/.oh-my-zsh"
+    export MY_HOSTNAME_CONTEXT="OLCT"
+elif [[ "${SYSTEM_NAME}" == *"Darwin"* ]]
 then
-    # echo "You are on ${sys_name}"
-    export ZSH="/Users/apartin/.oh-my-zsh"
+    # echo "You are on ${SYSTEM_NAME}"
+    # export ZSH="/Users/apartin/.oh-my-zsh"
+    export MY_HOSTNAME_CONTEXT="MAC"
 else
-    # echo "You are on ${hn}"
-    export ZSH="/homes/apartin/.oh-my-zsh"
+    # echo "You are on ${HOSTNAME}"
+    # export ZSH="/homes/apartin/.oh-my-zsh"
+    export MY_HOSTNAME_CONTEXT="GENERIC"
 fi
 
-# --------------------------------------------
-# Colors
-# --------------------------------------------
-# Theme
-# github.com/ohmyzsh/ohmyzsh/wiki/Themes
-# ZSH_THEME="robbyrussell"
-ZSH_THEME="gianu"
-# ZSH_THEME="avit"
-# ZSH_THEME="simple"
+# ---------------------
+# Fix for wrapped shell
+# ---------------------
+if [ -z "$ZSH_VERSION" ]; then
+  export ZSH_VERSION=$(zsh --version | awk '{print $2}')
+fi
 
+# ---------------------
+# Antidote setup
+# ---------------------
+if [ -n "$ZSH_VERSION" ]; then
+  ANTIDOTE_DIR="${HOME}/.zsh/antidote"
+  fpath+=("${ANTIDOTE_DIR}")
+  if [ -r "${ANTIDOTE_DIR}/antidote.zsh" ]; then
+    source "${ANTIDOTE_DIR}/antidote.zsh"
+    source <("${ANTIDOTE_DIR}/antidote.zsh" load < "${HOME}/.zsh_plugins.txt")
+  fi
+fi
+
+
+# Terminal
 export TERM=xterm-256color
-# export TERM=xterm-256color-italic
-
-# --------------------------------------------
-# Plugins
-# --------------------------------------------
-# github.com/ohmyzsh/ohmyzsh/wiki/Plugins
-# The plugins provides aliases and functions.
-# Too many plugins slow down shell startup!
-# Standard plugins are in ~/.oh-my-zsh/plugins/*
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(
-    git
-    zsh-syntax-highlighting
-    zsh-autosuggestions
-    docker
-    docker-compose
-)
-# fzf
-# --------------------------------------------
-
-source $ZSH/oh-my-zsh.sh
-
-
-# ========================================================================
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run `alias`.
-
-# Dotfiles
-alias dconfig='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 
 # Editor
 export EDITOR="vim"
@@ -78,90 +61,24 @@ bindkey -v
 export KEYTIMEOUT=1
 
 # Use vim keys in tab complete menu
-bindkey -M menuselect 'h' vi-backward-char
-bindkey -M menuselect 'k' vi-up-line-or-history
-bindkey -M menuselect 'l' vi-forward-char
-bindkey -M menuselect 'j' vi-down-line-or-history
-bindkey -v '^?' backward-delete-char
-
-# # Change cursor shape for different vi modes.
-# function zle-keymap-select {
-#   if [[ ${KEYMAP} == vicmd ]] ||
-#      [[ $1 = 'block' ]]; then
-#     echo -ne '\e[1 q'
-#   elif [[ ${KEYMAP} == main ]] ||
-#        [[ ${KEYMAP} == viins ]] ||
-#        [[ ${KEYMAP} = '' ]] ||
-#        [[ $1 = 'beam' ]]; then
-#     echo -ne '\e[5 q'
-#   fi
-# }
-# zle -N zle-keymap-select
-# zle-line-init() {
-#     zle -K viins # initiate `vi insert` as keymap (can be removed if `bindkey -V` has been set elsewhere)
-#     echo -ne "\e[5 q"
-# }
-# zle -N zle-line-init
-# echo -ne '\e[5 q' # Use beam shape cursor on startup.
-# preexec() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
+if bindkey -M menuselect > /dev/null 2>&1; then
+    bindkey -M menuselect 'h' vi-backward-char
+    bindkey -M menuselect 'k' vi-up-line-or-history
+    bindkey -M menuselect 'l' vi-forward-char
+    bindkey -M menuselect 'j' vi-down-line-or-history
+    bindkey -v '^?' backward-delete-char
+fi
 
 
 # ------------------------------------------
-# Alias Summit
+# Aliases
 # ------------------------------------------
-alias lvim="module load vim"
-alias uvim="module unload vim"
-# alias ltmux="module load tmux"
-alias ltmux="module load tmux/3.1b"
-alias utmux="module unload tmux"
-alias lenv="module load ibm-wml-ce/1.7.0-2"
-alias uenv="module unload ibm-wml-ce/1.7.0-2"
-
-
-# ------------------------------------------
-# Alias for fast access to dirs
-# ------------------------------------------
-# stackoverflow.com/questions/229551
-# hn=`hostname -f`
-# if [[ "${hn}" == *"olcf.ornl"* ]];
-# then
-#     alias md106="cd /ccs/proj/med106/apartin"
-#     alias md110="cd /ccs/proj/med110/apartin"
-#     alias gpfs="cd /gpfs/alpine/scratch/apartin"
-# elif [[ "${hn}" == *"lambda"* ]];
-#     alias prj="cd /lambda_stor/data/apartin/projects"
-# then
-# else
-#     # TODO this doesn't work??
-#     alias prj="cd /vol/ml/apartin/projects/"
-# fi
-
-# Summit
-alias md106="cd /ccs/proj/med106/apartin/projects"
-alias md110="cd /ccs/proj/med110/apartin/projects"
-alias gpfs="cd /gpfs/alpine/scratch/apartin"
-
-# Lambda
-alias prj="cd /lambda_stor/data/apartin/projects"
-
-# Vol
-alias vl="cd /vol/ml/apartin/projects"
-
-
-# ------------------------------------------
-# Alias General
-# ------------------------------------------
+alias prj="cd /lambda_stor/data/apartin/projects"  # Lambda
+alias vl="cd /vol/ml/apartin/projects"  # Vol
 alias coac="conda activate"
 alias codea="conda deactivate"
-
-# www.linuxtechi.com/rsync-command-examples-linux/
-# alias rsc="rsync -zarvh --progress" 
-
 alias sz="source ~/.zshrc"
 alias vw="vim -c ':VimwikiIndex'"
-
-# Neovim
-alias nvim="./nvim.appimage"
 
 
 # ------------------------------------------
@@ -172,38 +89,22 @@ alias nvim="./nvim.appimage"
 # source /sw/summit/ibm-wml-ce/anaconda-base/etc/profile.d/conda.sh
 # [[ -z $TMUX ]] || conda deactivate; conda activate base
 
-hn=`hostname -f`
-sys_name=`uname -a`
+HOSTNAME=`hostname -f`
+SYSTEM_NAME=`uname -a`
 
-if [[ "${hn}" == *"olcf.ornl"* ]]
+if [[ "${HOSTNAME}" == *"olcf.ornl"* ]]
 then
-    # echo "You are on ${hn}"
+    # echo "You are on ${HOSTNAME}"
     # source /sw/summit/ibm-wml-ce/anaconda-base/etc/profile.d/conda.sh  # commented out by conda initialize
     [[ -z $TMUX ]] || conda deactivate; conda activate base
 
-elif [[ "${sys_name}" == *"Darwin"* ]]
+elif [[ "${SYSTEM_NAME}" == *"Darwin"* ]]
 then
-    # # echo "You are on ${sys_name}"
-    # # >>> conda initialize >>>
-    # # !! Contents within this block are managed by 'conda init' !!
-    # __conda_setup="$('/Users/apartin/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-    # if [ $? -eq 0 ]; then
-    #     eval "$__conda_setup"
-    # else
-    #     if [ -f "/Users/apartin/miniconda3/etc/profile.d/conda.sh" ]; then
-    #         . "/Users/apartin/miniconda3/etc/profile.d/conda.sh"
-    #     else
-    #         export PATH="/Users/apartin/miniconda3/bin:$PATH"
-    #     fi
-    # fi
-    # unset __conda_setup
-    # # <<< conda initialize <<<
-
     # source /Users/apartin/miniconda3/etc/profile.d/conda.sh  # commented out by conda initialize
     [[ -z $TMUX ]] || conda deactivate; conda activate base
 
 else
-    # echo "You are on ${hn}"
+    # echo "You are on ${HOSTNAME}"
     # >>> conda initialize >>>
     # !! Contents within this block are managed by 'conda init' !!
     
@@ -220,22 +121,6 @@ else
     unset __conda_setup
     # <<< conda initialize <<<
 fi
-
-
-# ------------------------------------------
-# FZF
-# ------------------------------------------
-## export FZF_DEFAULT_COMMAND='ag -u -g ""'
-## export FZF_DEFAULT_COMMAND="rg --files --hidden --follow --glob '!.git'"
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-# github.com/horseinthesky/dotfiles/blob/master/files/.zshrc
-# if [[ -f "$HOME/.fzf.zsh" ]]; then
-#     [[ -f ~/.fzf.zsh ]] && source ~/.fzf.zsh
-#     export FZF_DEFAULT_COMMAND='. --type file --follow --hidden --exclude .git'
-#     export FZF_DEFAULT_OPTS="--extended"
-#     export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-# fi
 
 # Prevent duplicates of PATH variables
 typeset -U PATH
