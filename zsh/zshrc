@@ -1,5 +1,13 @@
 # ~/.zshrc → sourced by interactive Zsh sessions
 # Managed by ~/dotfiles — do not edit ~/.zshrc directly.
+#
+# How this file works:
+#   ~/.zshrc is a symlink to ~/dotfiles/zsh/zshrc (created by install.sh).
+#   It sets up the shell environment in this order:
+#     1. Terminal/colors  2. History  3. Editor  4. PATH
+#     5. Plugins (Antidote)  6. Completion  7. Vi mode  8. Prompt (Starship)
+#     9. fzf  10. Conda (lazy)  11. NVM (lazy)  12. System-specific config
+#     13. Aliases & functions  14. Local overrides (~/.zshrc.local)
 
 DOTFILES_DIR="$HOME/dotfiles"
 
@@ -17,37 +25,46 @@ fi
 # ----------------------------------------------------------
 # Terminal / colors
 # ----------------------------------------------------------
+# Most programs use $TERM to decide what escape codes to send for colors,
+# cursor movement, etc. xterm-256color is the safe universal default.
+# We only override if not already set to xterm-ghostty (which supports more).
 [[ "$TERM" != "xterm-ghostty" ]] && export TERM=xterm-256color
 
 # ----------------------------------------------------------
 # History
 # ----------------------------------------------------------
-HISTFILE=~/.zsh_history
-HISTSIZE=10000
-SAVEHIST=10000
+HISTFILE=~/.zsh_history     # where history is saved on disk
+HISTSIZE=10000              # max entries kept in memory per session
+SAVEHIST=10000              # max entries saved to HISTFILE
 setopt HIST_IGNORE_DUPS     # don't store consecutive duplicates
-setopt HIST_IGNORE_SPACE    # don't store commands starting with space
-setopt SHARE_HISTORY        # share history across sessions
-setopt APPEND_HISTORY       # append rather than overwrite
+setopt HIST_IGNORE_SPACE    # don't store commands starting with space (useful for secrets)
+setopt SHARE_HISTORY        # share history across all open terminal sessions
+setopt APPEND_HISTORY       # append rather than overwrite when shell exits
 
 # ----------------------------------------------------------
 # Editor
 # ----------------------------------------------------------
+# EDITOR: used by programs that need a terminal-based editor (git commit, crontab -e)
+# VISUAL: used by programs that prefer a visual editor (often same as EDITOR)
 export EDITOR="vim"
 export VISUAL="vim"
 
 # ----------------------------------------------------------
 # PATH
 # ----------------------------------------------------------
-# User local binaries (Starship, etc.)
+# ~/.local/bin is the standard location for user-installed binaries
+# (Starship lives here since we can't use sudo to install to /usr/local/bin)
 [[ -d "$HOME/.local/bin" ]] && export PATH="$HOME/.local/bin:$PATH"
 
-# Prevent duplicate PATH entries
+# typeset -U makes PATH behave like a set — duplicates are automatically removed.
+# Without this, PATH grows longer every time you source .zshrc or open a tmux pane.
 typeset -U PATH
 
 # ----------------------------------------------------------
 # Antidote (Zsh plugin manager)
 # ----------------------------------------------------------
+# Antidote replaces Oh My Zsh. It reads plugins from zsh/plugins.txt,
+# clones them on first run, and sources them. Much lighter than OMZ.
 ANTIDOTE_DIR="$HOME/.antidote"
 if [[ -d "$ANTIDOTE_DIR" ]]; then
     source "$ANTIDOTE_DIR/antidote.zsh"
@@ -59,62 +76,90 @@ fi
 # ----------------------------------------------------------
 # Completion
 # ----------------------------------------------------------
+# autoload -Uz: lazily load the compinit function (-U: suppress alias expansion, -z: zsh-style)
 autoload -Uz compinit
-# Only regenerate .zcompdump once per day
+# compinit scans all completion files and builds a cache (~/.zcompdump).
+# This is slow (~0.3s), so we only rebuild if the cache is older than 24 hours.
+# (#qN.mh+24) is a zsh glob qualifier: N=no error if missing, .=regular file, mh+24=modified 24+ hours ago
 if [[ -n ~/.zcompdump(#qN.mh+24) ]]; then
-    compinit
+    compinit           # full rebuild
 else
-    compinit -C
+    compinit -C        # skip security check, use cached dump (fast)
 fi
 
-zstyle ':completion:*' menu select
-zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'  # case-insensitive
+zstyle ':completion:*' menu select                          # arrow-key driven completion menu
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'  # case-insensitive tab completion
 
 # ----------------------------------------------------------
 # Vi mode
 # ----------------------------------------------------------
+# bindkey -v: use vi keybindings on the command line (instead of default emacs mode).
+# In vi mode you start in insert mode; press Esc to enter normal mode for navigation.
 bindkey -v
+# KEYTIMEOUT: how long (in 1/100s of a second) zsh waits after Esc before
+# deciding it's a standalone Esc (not part of a multi-key sequence). 1 = 10ms = snappy.
 export KEYTIMEOUT=1
 
-# Use vim keys in tab complete menu
+# Use vim-style hjkl to navigate the tab completion menu
 bindkey -M menuselect 'h' vi-backward-char
 bindkey -M menuselect 'k' vi-up-line-or-history
 bindkey -M menuselect 'l' vi-forward-char
 bindkey -M menuselect 'j' vi-down-line-or-history
+# In vi mode, backspace doesn't delete past the insert point by default. Fix that.
 bindkey -v '^?' backward-delete-char
 
 # ----------------------------------------------------------
 # Prompt (Starship)
 # ----------------------------------------------------------
+# Starship is a cross-shell prompt that shows git branch, conda env, etc.
+# `command -v` checks if starship binary exists on PATH.
 if command -v starship &>/dev/null; then
+    # starship init zsh outputs a shell script that sets up the prompt hooks.
+    # eval "$(...)" executes that output in the current shell.
     eval "$(starship init zsh)"
 else
-    # Fallback: simple built-in prompt
+    # Fallback if Starship isn't installed: a simple prompt showing
+    # current directory (blue) and git branch (green).
+    # vcs_info is a built-in zsh module that extracts version control info.
     autoload -Uz vcs_info
-    precmd() { vcs_info }
-    zstyle ':vcs_info:git:*' formats ' (%b)'
-    setopt PROMPT_SUBST
+    precmd() { vcs_info }                          # run vcs_info before each prompt
+    zstyle ':vcs_info:git:*' formats ' (%b)'       # format: (branch-name)
+    setopt PROMPT_SUBST                             # allow variable expansion in prompt
+    # %F{color}...%f = colored text, %~ = current dir, %# = % for user, # for root
     PROMPT='%F{blue}%~%f%F{green}${vcs_info_msg_0_}%f %# '
 fi
 
 # ----------------------------------------------------------
 # fzf
 # ----------------------------------------------------------
+# fzf's install script generates ~/.fzf.zsh which sets up:
+#   Ctrl-R: fuzzy search command history
+#   Ctrl-T: fuzzy search files and insert selected path
+#   Alt-C:  fuzzy search directories and cd into selection
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # ----------------------------------------------------------
 # Conda (lazy-loaded)
 # ----------------------------------------------------------
-# Wraps conda in a function that defers the expensive init
-# until first use. `conda activate myenv` works directly.
+# Conda's init script (`conda shell.zsh hook`) takes ~2 seconds to run,
+# which makes every new shell slow. Instead, we define a thin wrapper
+# function called `conda` that does nothing until you actually use conda.
+#
+# How it works:
+#   1. You type `conda activate myenv` (or any conda command)
+#   2. This wrapper runs, sources the real conda init script
+#   3. The wrapper removes itself (unfunction conda)
+#   4. The real `conda activate myenv` runs immediately
+#
+# Result: shell starts instantly, conda works on first use.
 _conda_init_done=0
 
 conda() {
     if (( ! _conda_init_done )); then
         _conda_init_done=1
-        unfunction conda  # remove this wrapper
+        unfunction conda  # remove this wrapper so the real conda takes over
 
-        # Find conda installation
+        # Search common conda install locations for the init script
         local conda_sh=""
         for dir in "$HOME/miniconda3" "$HOME/anaconda3" "$HOME/miniforge3"; do
             if [[ -f "$dir/etc/profile.d/conda.sh" ]]; then
@@ -124,13 +169,13 @@ conda() {
         done
 
         if [[ -n "$conda_sh" ]]; then
-            source "$conda_sh"
+            source "$conda_sh"   # this defines the real `conda` function
         else
             echo "[zshrc] Error: conda installation not found"
             return 1
         fi
 
-        # Now call the real conda with original arguments
+        # Forward the original command to the now-loaded real conda
         conda "$@"
     fi
 }
@@ -159,7 +204,10 @@ fi
 # ----------------------------------------------------------
 # System detection
 # ----------------------------------------------------------
-# Load system-specific config based on hostname
+# Load system-specific config based on hostname.
+# Each system has its own file in ~/dotfiles/system/ with machine-specific
+# settings (module loads, directory aliases, paths, etc.).
+# Unknown systems simply skip this — they get the base config only.
 _hostname=$(hostname -f 2>/dev/null || hostname)
 
 if [[ "$OSTYPE" == darwin* ]]; then
@@ -178,15 +226,21 @@ if [[ -n "$_sys_file" && -f "$_sys_file" ]]; then
     source "$_sys_file"
 fi
 
+# Clean up temporary variables so they don't pollute the shell environment
 unset _hostname _sys_file
 
 # ----------------------------------------------------------
 # Source modular configs
 # ----------------------------------------------------------
+# Aliases and functions are in separate files to keep zshrc focused on
+# shell setup. See zsh/aliases.zsh and zsh/functions.zsh.
 [[ -f "$DOTFILES_DIR/zsh/aliases.zsh" ]]   && source "$DOTFILES_DIR/zsh/aliases.zsh"
 [[ -f "$DOTFILES_DIR/zsh/functions.zsh" ]] && source "$DOTFILES_DIR/zsh/functions.zsh"
 
 # ----------------------------------------------------------
 # Local overrides (not tracked in git)
 # ----------------------------------------------------------
+# ~/.zshrc.local is for settings that are specific to this machine and
+# should NOT be committed to the dotfiles repo (e.g., work-specific env
+# vars, tokens, temporary aliases). Create it if you need it.
 [[ -f "$HOME/.zshrc.local" ]] && source "$HOME/.zshrc.local"

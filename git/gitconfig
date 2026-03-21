@@ -1,18 +1,29 @@
 # Git config — managed by ~/dotfiles
+# ~/.gitconfig is a symlink to ~/dotfiles/git/gitconfig (created by install.sh).
+# Machine-specific settings go in ~/.gitconfig.local (not tracked in git).
+
 [user]
 	name = Alex Partin
+	# noreply email: keeps your real email private in commits pushed to GitHub
 	email = 25892264+adpartin@users.noreply.github.com
 [core]
 	editor = vim
 [color]
-	ui = true
+	ui = true            # colorize git output (diff, status, log, etc.)
 [push]
+	# "simple" (default since git 2.0): push current branch to its upstream,
+	# but only if the upstream branch has the same name. Safer than "upstream"
+	# which pushes regardless of name match.
 	default = simple
 [merge]
+	# diff3: show 3-way diff in merge conflicts (ours / base / theirs).
+	# The "base" section shows what the code looked like before either side
+	# changed it, making conflicts much easier to understand.
 	conflictstyle = diff3
-	tool = vimdiff
+	tool = vimdiff       # use Vim's diff mode for resolving merge conflicts
 [mergetool]
-	prompt = false
-# Machine-specific settings (safe.directory, etc.)
+	prompt = false       # don't ask "do you want to open vimdiff?" for each file
+# Machine-specific settings (safe.directory, work email overrides, etc.)
+# Create ~/.gitconfig.local on each machine as needed.
 [include]
 	path = ~/.gitconfig.local

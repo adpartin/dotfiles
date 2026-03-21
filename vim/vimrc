@@ -1,396 +1,301 @@
-set nocompatible " Don't maintain compatibility with Vi. This must be first since it changes other options
-filetype plugin on
+" Vim config — managed by ~/dotfiles
+" ~/.vimrc is a symlink to ~/dotfiles/vim/vimrc (created by install.sh).
+"
+" Leader key: , (comma)
+"
+" Key mappings cheat sheet:
+"   ,w          save file               ,q          quit
+"   ,ev         edit vimrc (vsplit)      ,sv         reload vimrc
+"   ,r          search & replace         ,rc         search & replace (confirm)
+"   ,g          go to definition (ALE)   ,b          list buffers (fzf)
+"   ,l          search lines (buffer)    ,L          search lines (all buffers)
+"   ,wf         search VimWiki           ,u          uppercase word
+"   Ctrl-f      fuzzy find files         Ctrl-n      toggle NERDTree
+"   Tab/S-Tab   next/prev buffer         Q           close buffer
+"   Space       toggle fold              H/L         start/end of line
+"   J/K         move 5 lines down/up     jk or kj    escape (insert mode)
+"   Y           yank to end of line
+
+set nocompatible        " Use Vim defaults, not Vi. Must be first — changes other options.
+filetype plugin on      " Enable filetype-specific plugins (e.g., Python indent rules)
 
 " ======================================
-"  vim-plug settings
-" -----------------------
-" Specify a directory for plugins
-" - For Neovim: stdpath('data') . '/plugged'
-" - Avoid using standard Vim directory names like 'plugin'
+" Plugins (managed by vim-plug)
+" ======================================
+" vim-plug downloads plugins to ~/.vim/plugged/ on :PlugInstall.
+" Add/remove plugins here, then run :PlugInstall or :PlugClean.
 call plug#begin('~/.vim/plugged')
 
-" Tim Pope
-Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-surround'
-Plug 'tpope/vim-fugitive'
+" --- Editing essentials (Tim Pope) ---
+Plug 'tpope/vim-commentary'        " gc to comment/uncomment lines
+Plug 'tpope/vim-repeat'            " make . (repeat) work with plugin commands
+Plug 'tpope/vim-surround'          " cs'" to change surrounding ' to ", ds" to delete, ysiw" to add
+Plug 'tpope/vim-fugitive'          " :Git blame, :Git diff, :Git log — git inside Vim
 
-" FZF for Vim
-" Plugin outside ~/.vim/plugged with post-update hook
-" First, install github.com/junegunn/fzf using git
+" --- Fuzzy finder (fzf) ---
+" fzf is installed to ~/.fzf by install.sh; this plugin integrates it with Vim.
+" See mappings below: Ctrl-f, ,b, ,l, ,L
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 
-" NerdTree
-" Need to install nerdfonts and use Nerd Font as the font
+" --- File explorer (NERDTree) ---
+" Ctrl-n to toggle. Shows directory tree in a sidebar.
 Plug 'preservim/nerdtree'
-" Plug 'Xuyuanp/nerdtree-git-plugin'
-Plug 'ryanoasis/vim-devicons'
-" Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+Plug 'ryanoasis/vim-devicons'       " file type icons (requires Nerd Font in terminal)
 
-" Visual
-" Plug 'lifepillar/vim-solarized8'
-Plug 'morhetz/gruvbox'
-" Plug 'flazz/vim-colorschemes'
-" Plug 'sainnhe/forest-night'
-" Plug 'joshdick/onedark.vim'
-" Plug 'dracula/vim', { 'name': 'dracula' }
-" Plug 'arcticicestudio/nord-vim'
+" --- Colorscheme ---
+Plug 'morhetz/gruvbox'              " warm dark theme with good contrast
 
-Plug 'machakann/vim-highlightedyank'
-Plug 'sheerun/vim-polyglot'
+" --- Visual enhancements ---
+Plug 'machakann/vim-highlightedyank' " briefly highlight yanked text
+Plug 'sheerun/vim-polyglot'         " syntax highlighting for 100+ languages
 
-" Plug 'vim-airline/vim-airline'
-" Plug 'vim-airline/vim-airline-themes'
-Plug 'itchyny/lightline.vim'
-" Plug 'mengelbrecht/lightline-bufferline'
+" --- Status line ---
+Plug 'itchyny/lightline.vim'        " lightweight status bar (lighter than airline)
 
-" Tmux
-" :TmuxNavigatorProcessList to check if vim-tmux-navigator is properly
+" --- Tmux integration ---
+" Allows seamless C-h/j/k/l navigation between Vim splits and tmux panes.
+" The tmux side of this is configured in tmux.conf.
 Plug 'christoomey/vim-tmux-navigator'
-" Plug 'christoomey/vim-tmux-runner'
 
-Plug 'tmhedberg/SimpylFold'
+" --- Code folding ---
+Plug 'tmhedberg/SimpylFold'         " better Python code folding
 
-" Coc
-" I had problems with installing nodejs on remote machines.
-" Plug 'neoclide/coc.nvim', {'branch': 'release'}
-
-" ALE
+" --- Linting & completion (ALE) ---
+" ALE runs linters (flake8, pylsp) asynchronously. See ALE config section below.
 Plug 'dense-analysis/ale'
 
-" Others
-Plug 'vim-scripts/ReplaceWithRegister'
-" Plug 'mhinz/vim-signify'
+" --- Text operations ---
+Plug 'vim-scripts/ReplaceWithRegister'  " gr{motion} to replace with register contents
 
-" Python cell execution
+" --- Python REPL integration (vim-slime) ---
+" Send code from Vim to a tmux pane running IPython.
+" { 'for': 'python' } = only load when editing Python files.
 Plug 'jpalardy/vim-slime', { 'for': 'python' }
 Plug 'hanschen/vim-ipython-cell', { 'for': 'python' }
 
-" Notes
+" --- Notes (VimWiki) ---
+" ,wf to search wiki. `vw` alias in shell opens wiki index.
 Plug 'vimwiki/vimwiki'
-Plug 'godlygeek/tabular'
-Plug 'plasticboy/vim-markdown'
+Plug 'godlygeek/tabular'            " :Tabularize to align text by pattern
+Plug 'plasticboy/vim-markdown'       " better markdown syntax & folding
 
-" Initialize plugin system
 call plug#end()
 " ======================================
 
-" https://pybit.es/vim-tricks.html
+" Leader key — pressed before mappings like ,w ,q ,r etc.
+" Comma is easy to reach and doesn't conflict with built-in keys.
 let mapleader = ','
 
-" Colors
-" github.com/benizi/dotfiles/blob/master/.vim/vimrc
-syntax on  " syntax highlighting (similar to 'syndtax enable')
+" -----------------------------------------------------------------------------
+"   Colors / Theme
+" -----------------------------------------------------------------------------
+syntax on               " enable syntax highlighting
 
-" set t_Co=256
+" These escape sequences tell Vim how to send 24-bit (true color) codes
+" to the terminal. Without them, gruvbox falls back to 256-color approximation.
+let &t_8f="\<Esc>[38;2;%lu;%lu;%lum"   " set foreground color
+let &t_8b="\<Esc>[48;2;%lu;%lu;%lum"   " set background color
+set termguicolors       " use GUI colors in terminal (requires true color support)
 
-let &t_8f="\<Esc>[38;2;%lu;%lu;%lum"
-let &t_8b="\<Esc>[48;2;%lu;%lu;%lum"
-set termguicolors
-" if has( 'termguicolors' )
-"     set termguicolors
-" endif
-
-" This must come before the gruvbox is definded
+" gruvbox_italic must be set BEFORE loading the colorscheme
 let g:gruvbox_italic=1
-" let g:gruvbox_contrast_dark = 'soft'
 
 set background=dark
-" colorscheme solarized8
 colorscheme gruvbox
-" colorscheme forest-night
-" colorscheme molokai
-" colorscheme dessert
-" colorscheme wombat
-" colorscheme onedark
-" colorscheme dracula
-" colorscheme nord
 
-" (!) Required to show italic in vim markdown.
-" https://github.com/morhetz/gruvbox/issues/119
-let &t_ZH="\e[3m"
-let &t_ZR="\e[23m"
+" Terminal escape sequences for italic text (needed for markdown emphasis).
+let &t_ZH="\e[3m"      " start italic mode
+let &t_ZR="\e[23m"     " end italic mode
 
 
 " -----------------------------------------------------------------------------
 "   Basic Settings
 " -----------------------------------------------------------------------------
-set autoindent                  " Copy indent from current line on <cr>
-set backspace=indent,eol,start  " Sane backlspace vi.stackexchange.com/questions/2162/
-set belloff=all
-set conceallevel=2              " italic, bold, 
-set cursorline                  " highlight cursorline
-set encoding=UTF-8
-set hlsearch                    " Highlight search results
-set laststatus=2                " Show statusbar all the time
-set matchpairs+=<:>     	    " Highlight matching pairs of brackets. Use '%' char to jump btw them.
-set noswapfile  	            " Swap files give annoying warning
-set noshowmode                  " Don't show vim mode (use when lightline is used)
-set number                      " Display line numbers
-set relativenumber              " Display relative line number
-set ruler                       " Show line number and column number
-set scrolloff=3                 " Keep at least 2 lines below cursor
-set showmatch                   " Show matching brackets
-set showtabline=2               " Show tab line
-set ttyfast             	    " Speed up scrolling in Vim
+set autoindent                  " new lines inherit indent from previous line
+set backspace=indent,eol,start  " allow backspace over indent, line breaks, and insert start
+set belloff=all                 " disable all bell sounds
+set conceallevel=2              " hide markup syntax (e.g., **bold** shows as bold in markdown)
+set cursorline                  " highlight the line the cursor is on
+set encoding=UTF-8              " default character encoding
+set hlsearch                    " highlight all search matches (Enter to clear, see mapping below)
+set laststatus=2                " always show status line (needed for lightline)
+set matchpairs+=<:>             " add < > to bracket matching (% key jumps between pairs)
+set noswapfile                  " don't create .swp files (avoids "swap file already exists" warnings)
+set noshowmode                  " don't show --INSERT-- etc. (lightline shows this instead)
+set number                      " show absolute line numbers
+set relativenumber              " show relative line numbers (makes 5j, 10k easy to count)
+set ruler                       " show line:column in bottom right
+set scrolloff=3                 " keep 3 lines visible above/below cursor when scrolling
+set showmatch                   " briefly jump to matching bracket when typing one
+set showtabline=2               " always show the tab/buffer line at the top
+set ttyfast                     " assume fast terminal connection (smoother scrolling)
 
-" stackoverflow.com/questions/234564
-" set autoindent                " copy indent when starting a new line
-set expandtab                   " Expand tabs to spaces
-set shiftwidth=4                " Number of spaces to use for (auto) indent
-set tabstop=4                   " The number of spaces that a <Tab> counts for
+" Indentation: 4 spaces, no tabs
+set expandtab                   " pressing Tab inserts spaces, not a tab character
+set shiftwidth=4                " >> and << indent by 4 spaces
+set tabstop=4                   " display tab characters as 4 spaces wide
 
 
 " -----------------------------------------------------------------------------
 "   Mappings
 " -----------------------------------------------------------------------------
-" Clear search highlights
-" vi.stackexchange.com/questions/8741
-" nnoremap <ESC><ESC> :silent! nohls<cr>
+
+" Press Enter in normal mode to clear search highlighting
 nnoremap <CR> :silent! nohls<CR>
-" nnoremap \\ :silent! nohls<CR>
 
-" Mappings in Normal mode
-" nnoremap 0 ^
-
-" Move up and down by visible lines if current line is wrapped
+" j/k move by visual line (useful when a long line wraps to multiple screen lines)
 nnoremap j gj
 nnoremap k gk
 
-" Map Esc
+" Quick escape from insert mode (type jk or kj instead of reaching for Esc)
 inoremap jk <ESC>
 inoremap kj <ESC>
 
-" Make Y behave as D
-" github.com/davidhalter/dotfiles/blob/master/.vimrc
+" Y yanks to end of line (consistent with D and C which also act to end of line)
 map Y y$
 
-" Redo with U
-" nnoremap U <C-r>
-
-" Uppercase
+" ,u uppercases the current word
 nnoremap <Leader>u gUiwe
 inoremap <Leader>u <ESC>gUiwea
 
-
-" Map write (save) file
+" ,w to save, ,q to quit (works in both normal and insert mode)
 inoremap <Leader>w <ESC>:w<CR>
 nnoremap <Leader>w :w<CR>
-
-" Map quit file
 inoremap <Leader>q <ESC>:q<CR>
 nnoremap <Leader>q :q<CR>
 
-" Map fold code; TODO: how to unbind za
+" Space toggles code fold (za = toggle fold under cursor)
 nnoremap <Space> za
-" nnoremap <leader>z zMzvzz
 
-" Press * to search for the term under the cursor or a visual selection and
-" then press a key below to replace all instances of it in the current file.
-" github.com/nickjj/dotfiles/blob/master/.vimrc
+" Search & replace: press * to highlight a word, then:
+"   ,r   → replace all occurrences in file
+"   ,rc  → replace with confirmation for each
 nnoremap <Leader>r :%s///g<Left><Left>
 nnoremap <Leader>rc :%s///gc<Left><Left><Left>
 
-" The same as above but instead of acting on the whole file it will be
-" restricted to the previously visually selected range. You can do that by
-" pressing *, visually selecting the range you want it to apply to and then
-" press a key below to replace all instances of it in the current selection.
-" github.com/nickjj/dotfiles/blob/master/.vimrc
+" Same as above but restricted to visual selection
 xnoremap <Leader>r :s///g<Left><Left>
 xnoremap <Leader>rc :s///gc<Left><Left><Left>
 
-" Buffers
-" nnoremap <Leader>n :enew<CR>  " new buffer
-nnoremap <Tab> :bnext<CR>         " next buffer
-nnoremap <S-Tab> :bprev<CR>       " previous buffer
-nnoremap <Leader><Space> :b#<CR>  " recent buffer
-" nnoremap <Leader>a :only<CR>  " only buffer
-nnoremap Q :bd!<CR>               " close buffer
+" Buffer navigation
+nnoremap <Tab> :bnext<CR>         " Tab → next buffer
+nnoremap <S-Tab> :bprev<CR>       " Shift-Tab → previous buffer
+nnoremap <Leader><Space> :b#<CR>  " ,Space → toggle between last two buffers
+nnoremap Q :bd!<CR>               " Q → close current buffer
 
-" ALE
+" ,g → jump to definition of symbol under cursor (via ALE/LSP)
 map <Leader>g :ALEGoToDefinition<CR>
 
-" NERDTree
+" Ctrl-n → toggle file explorer sidebar (NERDTree)
 map <C-n> :NERDTreeToggle<CR>
 
-" FZF
-" github.com/nickjj/dotfiles/blob/master/.vimrc
-" https://jesseleite.com/posts/2/its-dangerous-to-vim-alone-take-fzf
-" Lines: lines in loaded buffers
-" BLines: lines in the current buffer
-" Files: search files
-" GFiles: git ls-files
-" GFiles?: git status
-nnoremap <silent> <C-f> :Files<CR>
-nnoremap <silent> <Leader>b :Buffers<CR>
-nnoremap <silent> <Leader>L :Lines<CR>
-nnoremap <silent> <Leader>l :BLines<CR>
+" FZF (fuzzy finder) mappings
+nnoremap <silent> <C-f> :Files<CR>       " Ctrl-f → find files in current directory
+nnoremap <silent> <Leader>b :Buffers<CR> " ,b → search open buffers
+nnoremap <silent> <Leader>L :Lines<CR>   " ,L → search lines across all buffers
+nnoremap <silent> <Leader>l :BLines<CR>  " ,l → search lines in current buffer
 
-" Vimwiki
-" nnoremap <Leader>wi :VimwikiIndex<CR>
+" VimWiki: ,wf → search wiki for a pattern
 nnoremap <Leader>wf :VWS //<Left>
 
-
-" --------------------------------------
-" learnvimscriptthehardway.stevelosh.com
-" --------------------------------------
+" ,ev → open vimrc in vertical split for quick editing
+" ,sv → reload vimrc without restarting Vim
 nnoremap <Leader>ev :vsplit $MYVIMRC<CR>
 nnoremap <Leader>sv :source $MYVIMRC<CR>
 
+" H/L → jump to start/end of line (easier than ^ and $)
 nnoremap H ^
 nnoremap L $
-" nnoremap J G
-" nnoremap K gg
+" J/K → move 5 lines at a time (faster scrolling than j/k)
 nnoremap J 5j
 nnoremap K 5k
 
 
 " -----------------------------------------------------------------------------
-"   Basic settings
+"   Plugin settings
 " -----------------------------------------------------------------------------
-let g:python_highlight_space_errors = 0  " disable red line in polyglot
 
+" Polyglot: disable red highlighting of trailing spaces in Python files
+let g:python_highlight_space_errors = 0
 
-" -----------------------------------------------------------------------------
-"   VimWiki
-" -----------------------------------------------------------------------------
+" VimWiki: personal wiki stored as markdown files in ~/vimwiki/
+" Open with `vw` shell alias or :VimwikiIndex
 let g:vimwiki_list = [{'path': '~/vimwiki/', 'syntax': 'markdown', 'ext': '.md'}]
 
-
-" -----------------------------------------------------------------------------
-"   NERDTree
-" -----------------------------------------------------------------------------
+" NERDTree: file explorer sidebar (toggle with Ctrl-n)
 let NERDTreeIgnore = ['\.pyc$', '\.pyo$', '__pycache__', '.ipynb_checkpoints']
+let NERDTreeQuitOnOpen=1         " close tree after opening a file
+let NERDTreeNaturalSort=1        " sort file1, file2, file10 (not file1, file10, file2)
+let NERDTreeShowHidden=1         " show dotfiles
+let NERDTreeAutoDeleteBuffer=1   " remove buffer when file is deleted from tree
 
-" Automatically close tree after file is opened from it
-let NERDTreeQuitOnOpen=1  " options: 0, 1, 2, 3
-
-" Sort files with numbers naturally
-let NERDTreeNaturalSort=1
-
-" Show hidden files by default
-let NERDTreeShowHidden=1
-
-" Automatically delete buffer when file is deleted from the tree explorer
-let NERDTreeAutoDeleteBuffer=1
-
-
-" -----------------------------------------------------------------------------
-"   Status Line
-" -----------------------------------------------------------------------------
-" Lighline
-" github.com/statico/dotfiles/blob/202e30b23e5216ffb6526cce66a0ef4fa7070456/.vim/vimrc
-" let g:lightline#bufferline#show_number  = 1           " Buffer number as shown by the :ls command
-" let g:lightline#bufferline#shorten_path = 0           " Defines whether to shorten the path
-" let g:lightline#bufferline#unnamed      = '[No Name]' " The name to use for unnamed buffers
-
+" Lightline: status bar at the bottom of Vim
+" Shows: mode | readonly | filename | modified   ...   line:col | percent
 let g:lightline = {'colorscheme': 'wombat'}
 let g:lightline.active = {'left': [['mode', 'paste'], ['readonly', 'filename', 'modified']]}
 let g:lightline.active = {'right': [['lineinfo'], ['percent']]}
-" let g:lightline.active = {'right': [['lineinfo'], ['percent'], ['fileformat', 'fileencoding']]}
-
-" let g:lightline.tabline          = {'left': [['buffers']]}
-" let g:lightline.tabline          = {'left': [['buffers']], 'right': [['close']]}
-" let g:lightline.component_expand = {'buffers': 'lightline#bufferline#buffers'}
-" let g:lightline.component_type   = {'buffers': 'tabsel'}
 
 
 " -----------------------------------------------------------------------------
-"   ALE Configs
+"   ALE (Asynchronous Lint Engine)
 " -----------------------------------------------------------------------------
-" Linting
-" let g:ale_linters = {'python': ['flake8', 'pyls']}
+" ALE provides linting (error checking) and basic code completion for Python.
+" It runs linters in the background without blocking Vim.
+"
+" Linting is set to manual-only (not on save, not on text change).
+" To lint manually:  :ALELint
+" To fix manually:   :ALEFix
+" To go to def:      ,g
+
+" Linters: flake8 for style, pylsp for language features
 let g:ale_linters = {'python': ['flake8', 'pylsp']}
 
-" https://github.com/dense-analysis/ale/issues/3722
+" Configure pylsp: disable redundant checks (flake8 already handles these)
 let g:ale_python_pyls_executable = "pylsp"
 let g:ale_python_pyls_config = {
 \   'pylsp': {
 \     'plugins': {
-\       'pycodestyle': {
-\         'enabled': v:false,
-\       },
-\       'pyflakes': {
-\         'enabled': v:false,
-\       },
-\       'pydocstyle': {
-\         'enabled': v:false,
-\       },
+\       'pycodestyle': { 'enabled': v:false },
+\       'pyflakes':    { 'enabled': v:false },
+\       'pydocstyle':  { 'enabled': v:false },
 \     },
 \   },
 \}
 
-" Set this in your vimrc file to disabling highlighting
-let g:ale_set_highlights = 0
+" When to lint (all disabled = manual only via :ALELint)
+let g:ale_set_highlights = 0            " don't highlight errors inline
+let g:ale_lint_on_text_changed = 'never' " don't lint while typing
+let g:ale_lint_on_enter = 0             " don't lint when opening a file
+let g:ale_lint_on_save = 0              " don't lint on save
 
-" can't enbale linting for a single buffer when ale_enabled=1
-" let g:ale_enabled = 0
-let g:ale_lint_on_text_changed = 'never'
-let g:ale_lint_on_enter = 0
-let g:ale_lint_on_save = 0
-" Only run linters named in ale_linters settings.
-" let g:ale_linters_explicit = 1
+" Fixers: applied with :ALEFix (or automatically if ale_fix_on_save=1)
+let g:ale_fixers = {'*': ['remove_trailing_lines', 'trim_whitespace']}
+let g:ale_fix_on_save = 0              " don't auto-fix on save
 
-" Fixing
-let g:ale_fixers = {'*': ['remove_trailing_lines', 'trim_whitespace']} " works!
-" let g:ale_fixers = {'*': ['remove_trailing_lines', 'trim_whitespace'], 'python': ['black']}
-" let g:ale_fixers = {'*': ['remove_trailing_lines', 'trim_whitespace'], 'python': ['yapf']}
-let g:ale_fix_on_save = 0
-
-" Remove background color in sign gutter for linting
-" https://github.com/dense-analysis/ale/issues/249
+" Gutter signs for errors/warnings (shown in the left margin)
 highlight clear ALEErrorSign
 highlight clear ALEWarningSign
+let g:ale_sign_error = '✗'
+let g:ale_sign_warning = '.'
 
-let g:ale_sign_error = '✗'  " recently commented
-" let g:ale_sign_error = '•'
-" let g:ale_sign_warning = '•'
-" let g:ale_sign_warning = '▲'
-let g:ale_sign_warning = '.'  " recently commented
+" Enable ALE's built-in code completion (uses pylsp)
+let g:ale_completion_enabled=1
 
-" let g:ale_echo_msg_error_str = 'Error'  " 'E'
-" let g:ale_echo_msg_warning_str = 'Warning'  " 'W'
-
-" github.com/horseinthesky/dotfiles/blob/master/files/init.vim
-" ignore long-lines, import on top of the file, unused modules and statement with colon
-" let g:ale_python_flake8_options = '--ignore=E501,E402,F401,E701'
-" ignore long-lines for autopep8 fixer
-" let g:ale_python_autopep8_options = '--ignore=E501'
-
-" https://github.com/statico/dotfiles/blob/master/.vim/vimrc
-" https://yufanlu.net/2018/09/03/neovim-python/
-" Ale
-" let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
-" " Airline
-" let g:airline_left_sep  = ''
-" let g:airline_right_sep = ''
-" let g:airline#extensions#ale#enabled = 1
-" let airline#extensions#ale#error_symbol = 'E:'
-" let airline#extensions#ale#warning_symbol = 'W:'
-
-" Disable things (LSP, etc)
-" Completion is only supported while at least one LSP linter is enabled.
-" ALE integrates with Deoplete for offering automatic completion data.
-let g:ale_completion_enabled=1  " code completion (default=0)
-" let g:ale_disable_lsp=1         " ignore linters powered by lsp and also tsserver (default=0)
-" let g:ale_update_tagstack=0     " go to definition
-
-" Disable auto-detection of virtualenvironments
-" https://github.com/dense-analysis/ale/issues/3052
+" Don't auto-detect conda/virtualenv — use whatever Python is active in shell
 let g:ale_virtualenv_dir_names = []
 
 
 " -----------------------------------------------------------------------------
-"   Slime Configs
+"   Vim-Slime (send code to REPL)
 " -----------------------------------------------------------------------------
-" always use tmux
-let g:slime_target = 'tmux'
+" Slime sends code from Vim to a running IPython session in a tmux pane.
+" Workflow: open a tmux split, start IPython there, then from Vim use
+" Ctrl-c Ctrl-c to send the current cell/selection to IPython.
+let g:slime_target = 'tmux'           " send to a tmux pane (not screen, etc.)
+let g:slime_python_ipython = 1        " use %paste for clean IPython pasting
 
-" fix paste issues in ipython
-let g:slime_python_ipython = 1
-
-" always send text to the top-right pane in the current tmux tab without asking
+" Automatically target the top-right tmux pane (no prompt asking where to send)
 let g:slime_default_config = {
             \ 'socket_name': get(split($TMUX, ','), 0),
             \ 'target_pane': '{top-right}' }
@@ -400,31 +305,24 @@ let g:slime_dont_ask_default = 1
 " -----------------------------------------------------------------------------
 "   FZF
 " -----------------------------------------------------------------------------
-" Bat Preview Theme
+" When fzf previews files, use bat with this theme for syntax-highlighted preview
 let $BAT_THEME = 'Solarized (dark)'
-" Let FZF find hidden files and folders
-" let $FZF_DEFAULT_COMMAND='find . -not -path "*/\.git*" -type f -print'
 
 
 " -----------------------------------------------------------------------------
-" Complex settings
+"   Window management
 " -----------------------------------------------------------------------------
-" https://thoughtbot.com/upcase/videos/tmux-vim-integration
-" automatically rebalance windows on vim resize
+" When terminal is resized (e.g., toggling tmux zoom), rebalance all Vim splits
 autocmd VimResized * :wincmd =
 
-" zoom a vim pane, <C-w>= to re-balance
-" (ap) this doesn't work (?!)
+" ,~ → zoom current split to fill screen (like tmux zoom but for Vim splits)
+" ,= → rebalance all splits back to equal size
 nnoremap <Leader>~ :wincmd _<CR>:wincmd \|<CR>
 nnoremap <Leader>= :wincmd =<CR>
 
-" thoughtbot.com/upcase/videos/tmux-vim-integration
-" I haven't tried this. See if I can also initiate a specific conda env.
-" Not sure why this doesn't open a new pane (??)
-" nnoremap <leader>py :VtrOpenRunner {'orientation': 'h', 'percentage': 50, 'cmd': 'python'}<cr>
-
-" When switching buffers, preserve window view.
-" stackoverflow.com/questions/18048944
+" When switching buffers, remember scroll position so you return to the
+" same spot (not the top of the file). Without this, :bnext then :bprev
+" loses your place.
 if v:version >= 700
    au BufLeave * if !&diff | let b:winview = winsaveview() | endif
    au BufEnter * if exists('b:winview') && !&diff | call   winrestview(b:winview) | endif

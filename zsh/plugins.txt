@@ -1,7 +1,18 @@
-# Antidote plugin list — loaded by zshrc
-# One plugin per line. See: https://getantidote.github.io
+# Antidote plugin list — loaded by zshrc via `antidote load`.
+# Format: github-user/repo (one per line). Antidote clones each plugin
+# on first load and caches them in ~/.cache/antidote.
+# See: https://getantidote.github.io
 
+# Additional tab-completion definitions for common tools (docker, npm, etc.)
 zsh-users/zsh-completions
+
+# Fish-like suggestions from history as you type (accept with right arrow)
 zsh-users/zsh-autosuggestions
+
+# Colors valid commands green, invalid red, strings yellow, etc.
+# MUST be last — it needs to wrap all other ZLE widgets to work correctly.
 zsh-users/zsh-syntax-highlighting
+
+# Tracks your most-used directories. Type `z foo` to jump to ~/some/path/foo.
+# Based on "frecency" (frequency + recency).
 agkozak/zsh-z
