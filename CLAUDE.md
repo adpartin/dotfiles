@@ -38,8 +38,9 @@ Personal dotfiles repo using clone+symlinks pattern (not bare repo). The `redesi
 
 ## When helping with this repo
 
+- At the start of a session, run `hostname` and `uname -s` to identify which system you're on. This determines which `system/*.zsh` file applies and what's available (sudo, Homebrew, module system, etc.).
 - Read the relevant config file before suggesting changes
 - Every setting must be ported or explicitly documented as intentionally removed
 - Test incrementally — build one file, test it, move on
 - System-specific settings go in `system/*.zsh`, not in the main zshrc or aliases
-- MacBook setup: `system/macos.zsh` needs to be populated (Homebrew PATH, macOS-specific settings)
+- MacBook setup: `system/macos.zsh` needs to be populated (Homebrew PATH, macOS-specific settings, VimWiki path points to Dropbox)
