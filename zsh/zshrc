@@ -118,6 +118,8 @@ bindkey -v '^?' backward-delete-char
 # Prompt (Starship)
 # ----------------------------------------------------------
 # Starship is a cross-shell prompt that shows git branch, conda env, etc.
+# Replaces Oh My Zsh's "gianu" theme (which was used previously).
+# Starship is customizable via ~/.config/starship.toml (see: https://starship.rs/presets/)
 # `command -v` checks if starship binary exists on PATH.
 if command -v starship &>/dev/null; then
     # starship init zsh outputs a shell script that sets up the prompt hooks.
