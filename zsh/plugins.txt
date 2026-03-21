@@ -1,0 +1,7 @@
+# Antidote plugin list — loaded by zshrc
+# One plugin per line. See: https://getantidote.github.io
+
+zsh-users/zsh-completions
+zsh-users/zsh-autosuggestions
+zsh-users/zsh-syntax-highlighting
+agkozak/zsh-z

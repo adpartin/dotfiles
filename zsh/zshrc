@@ -1,0 +1,192 @@
+# ~/.zshrc → sourced by interactive Zsh sessions
+# Managed by ~/dotfiles — do not edit ~/.zshrc directly.
+
+DOTFILES_DIR="$HOME/dotfiles"
+
+# ----------------------------------------------------------
+# Ghostty terminfo fallback
+# ----------------------------------------------------------
+# When SSH'ing from Ghostty, $TERM is xterm-ghostty.
+# If the remote host lacks that terminfo, fall back gracefully.
+if [[ "$TERM" == "xterm-ghostty" ]] && ! infocmp xterm-ghostty &>/dev/null; then
+    echo "[zshrc] Warning: xterm-ghostty terminfo not found, falling back to xterm-256color"
+    echo "        To fix: infocmp -x xterm-ghostty | ssh $HOST tic -x -"
+    export TERM=xterm-256color
+fi
+
+# ----------------------------------------------------------
+# Terminal / colors
+# ----------------------------------------------------------
+[[ "$TERM" != "xterm-ghostty" ]] && export TERM=xterm-256color
+
+# ----------------------------------------------------------
+# History
+# ----------------------------------------------------------
+HISTFILE=~/.zsh_history
+HISTSIZE=10000
+SAVEHIST=10000
+setopt HIST_IGNORE_DUPS     # don't store consecutive duplicates
+setopt HIST_IGNORE_SPACE    # don't store commands starting with space
+setopt SHARE_HISTORY        # share history across sessions
+setopt APPEND_HISTORY       # append rather than overwrite
+
+# ----------------------------------------------------------
+# Editor
+# ----------------------------------------------------------
+export EDITOR="vim"
+export VISUAL="vim"
+
+# ----------------------------------------------------------
+# PATH
+# ----------------------------------------------------------
+# User local binaries (Starship, etc.)
+[[ -d "$HOME/.local/bin" ]] && export PATH="$HOME/.local/bin:$PATH"
+
+# Prevent duplicate PATH entries
+typeset -U PATH
+
+# ----------------------------------------------------------
+# Antidote (Zsh plugin manager)
+# ----------------------------------------------------------
+ANTIDOTE_DIR="$HOME/.antidote"
+if [[ -d "$ANTIDOTE_DIR" ]]; then
+    source "$ANTIDOTE_DIR/antidote.zsh"
+    antidote load "$DOTFILES_DIR/zsh/plugins.txt"
+else
+    echo "[zshrc] Warning: Antidote not found at $ANTIDOTE_DIR — run install.sh"
+fi
+
+# ----------------------------------------------------------
+# Completion
+# ----------------------------------------------------------
+autoload -Uz compinit
+# Only regenerate .zcompdump once per day
+if [[ -n ~/.zcompdump(#qN.mh+24) ]]; then
+    compinit
+else
+    compinit -C
+fi
+
+zstyle ':completion:*' menu select
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'  # case-insensitive
+
+# ----------------------------------------------------------
+# Vi mode
+# ----------------------------------------------------------
+bindkey -v
+export KEYTIMEOUT=1
+
+# Use vim keys in tab complete menu
+bindkey -M menuselect 'h' vi-backward-char
+bindkey -M menuselect 'k' vi-up-line-or-history
+bindkey -M menuselect 'l' vi-forward-char
+bindkey -M menuselect 'j' vi-down-line-or-history
+bindkey -v '^?' backward-delete-char
+
+# ----------------------------------------------------------
+# Prompt (Starship)
+# ----------------------------------------------------------
+if command -v starship &>/dev/null; then
+    eval "$(starship init zsh)"
+else
+    # Fallback: simple built-in prompt
+    autoload -Uz vcs_info
+    precmd() { vcs_info }
+    zstyle ':vcs_info:git:*' formats ' (%b)'
+    setopt PROMPT_SUBST
+    PROMPT='%F{blue}%~%f%F{green}${vcs_info_msg_0_}%f %# '
+fi
+
+# ----------------------------------------------------------
+# fzf
+# ----------------------------------------------------------
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# ----------------------------------------------------------
+# Conda (lazy-loaded)
+# ----------------------------------------------------------
+# Wraps conda in a function that defers the expensive init
+# until first use. `conda activate myenv` works directly.
+_conda_init_done=0
+
+conda() {
+    if (( ! _conda_init_done )); then
+        _conda_init_done=1
+        unfunction conda  # remove this wrapper
+
+        # Find conda installation
+        local conda_sh=""
+        for dir in "$HOME/miniconda3" "$HOME/anaconda3" "$HOME/miniforge3"; do
+            if [[ -f "$dir/etc/profile.d/conda.sh" ]]; then
+                conda_sh="$dir/etc/profile.d/conda.sh"
+                break
+            fi
+        done
+
+        if [[ -n "$conda_sh" ]]; then
+            source "$conda_sh"
+        else
+            echo "[zshrc] Error: conda installation not found"
+            return 1
+        fi
+
+        # Now call the real conda with original arguments
+        conda "$@"
+    fi
+}
+
+# ----------------------------------------------------------
+# NVM (lazy-loaded, if installed)
+# ----------------------------------------------------------
+# NVM (Node Version Manager) provides Node.js, which is
+# required by tools like Claude Code. NVM's init is slow
+# (~0.5s), so we wrap nvm/node/npm/npx in stub functions.
+# The first call to any of them sources the real NVM init,
+# removes all stubs, and forwards the command.
+export NVM_DIR="$HOME/.nvm"
+if [[ -d "$NVM_DIR" ]]; then
+    _load_nvm() {
+        unfunction nvm node npm npx _load_nvm 2>/dev/null
+        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+        [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+    }
+    nvm()  { _load_nvm; nvm "$@"; }
+    node() { _load_nvm; node "$@"; }
+    npm()  { _load_nvm; npm "$@"; }
+    npx()  { _load_nvm; npx "$@"; }
+fi
+
+# ----------------------------------------------------------
+# System detection
+# ----------------------------------------------------------
+# Load system-specific config based on hostname
+_hostname=$(hostname -f 2>/dev/null || hostname)
+
+if [[ "$OSTYPE" == darwin* ]]; then
+    _sys_file="$DOTFILES_DIR/system/macos.zsh"
+elif [[ "$_hostname" == *"polaris"* ]]; then
+    _sys_file="$DOTFILES_DIR/system/polaris.zsh"
+elif [[ "$_hostname" == *"aurora"* ]]; then
+    _sys_file="$DOTFILES_DIR/system/aurora.zsh"
+elif [[ "$_hostname" == *"lambda"* ]]; then
+    _sys_file="$DOTFILES_DIR/system/gpu-node.zsh"
+else
+    _sys_file=""
+fi
+
+if [[ -n "$_sys_file" && -f "$_sys_file" ]]; then
+    source "$_sys_file"
+fi
+
+unset _hostname _sys_file
+
+# ----------------------------------------------------------
+# Source modular configs
+# ----------------------------------------------------------
+[[ -f "$DOTFILES_DIR/zsh/aliases.zsh" ]]   && source "$DOTFILES_DIR/zsh/aliases.zsh"
+[[ -f "$DOTFILES_DIR/zsh/functions.zsh" ]] && source "$DOTFILES_DIR/zsh/functions.zsh"
+
+# ----------------------------------------------------------
+# Local overrides (not tracked in git)
+# ----------------------------------------------------------
+[[ -f "$HOME/.zshrc.local" ]] && source "$HOME/.zshrc.local"
