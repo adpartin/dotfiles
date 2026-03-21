@@ -40,6 +40,7 @@ setopt HIST_IGNORE_DUPS     # don't store consecutive duplicates
 setopt HIST_IGNORE_SPACE    # don't store commands starting with space (useful for secrets)
 setopt SHARE_HISTORY        # share history across all open terminal sessions
 setopt APPEND_HISTORY       # append rather than overwrite when shell exits
+setopt AUTO_CD              # type a directory path to cd into it (e.g., ../ or ~/dotfiles)
 
 # ----------------------------------------------------------
 # Editor
@@ -90,6 +91,16 @@ fi
 zstyle ':completion:*' menu select                          # arrow-key driven completion menu
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'  # case-insensitive tab completion
 
+# Load the menuselect keymap (created by compinit + menu select style).
+# Must be loaded explicitly before we can bind keys in it.
+zmodload zsh/complist
+
+# Use vim-style hjkl to navigate the tab completion menu
+bindkey -M menuselect 'h' vi-backward-char
+bindkey -M menuselect 'k' vi-up-line-or-history
+bindkey -M menuselect 'l' vi-forward-char
+bindkey -M menuselect 'j' vi-down-line-or-history
+
 # ----------------------------------------------------------
 # Vi mode
 # ----------------------------------------------------------
@@ -100,11 +111,6 @@ bindkey -v
 # deciding it's a standalone Esc (not part of a multi-key sequence). 1 = 10ms = snappy.
 export KEYTIMEOUT=1
 
-# Use vim-style hjkl to navigate the tab completion menu
-bindkey -M menuselect 'h' vi-backward-char
-bindkey -M menuselect 'k' vi-up-line-or-history
-bindkey -M menuselect 'l' vi-forward-char
-bindkey -M menuselect 'j' vi-down-line-or-history
 # In vi mode, backspace doesn't delete past the insert point by default. Fix that.
 bindkey -v '^?' backward-delete-char
 

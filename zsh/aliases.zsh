@@ -5,6 +5,14 @@
 # go in system/*.zsh instead.
 
 # ----------------------------------------------------------
+# Navigation (previously provided by Oh My Zsh)
+# ----------------------------------------------------------
+alias ..="cd .."
+alias ...="cd ../.."
+alias la="ls -la"
+alias ll="ls -l"
+
+# ----------------------------------------------------------
 # Git
 # ----------------------------------------------------------
 alias gst="git status"                  # replaces the OMZ git plugin's gst
