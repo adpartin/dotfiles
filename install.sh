@@ -70,10 +70,11 @@ echo ""
 #   - `git diff` in ~/dotfiles shows exactly what changed
 info "Creating symlinks..."
 
-backup_and_link "$DOTFILES_DIR/zsh/zshrc"       "$HOME/.zshrc"
-backup_and_link "$DOTFILES_DIR/vim/vimrc"        "$HOME/.vimrc"
-backup_and_link "$DOTFILES_DIR/tmux/tmux.conf"   "$HOME/.tmux.conf"
-backup_and_link "$DOTFILES_DIR/git/gitconfig"     "$HOME/.gitconfig"
+backup_and_link "$DOTFILES_DIR/zsh/zshrc"              "$HOME/.zshrc"
+backup_and_link "$DOTFILES_DIR/vim/vimrc"               "$HOME/.vimrc"
+backup_and_link "$DOTFILES_DIR/tmux/tmux.conf"          "$HOME/.tmux.conf"
+backup_and_link "$DOTFILES_DIR/git/gitconfig"            "$HOME/.gitconfig"
+backup_and_link "$DOTFILES_DIR/starship/starship.toml"  "$HOME/.config/starship.toml"
 
 echo ""
 

@@ -1,0 +1,6 @@
+# Starship prompt config — managed by ~/dotfiles
+# See: https://starship.rs/config/
+# Presets: https://starship.rs/presets/
+
+# Don't add an empty line before each prompt
+add_newline = false
