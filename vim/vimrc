@@ -219,9 +219,12 @@ nnoremap K 5k
 " Polyglot: disable red highlighting of trailing spaces in Python files
 let g:python_highlight_space_errors = 0
 
-" VimWiki: personal wiki stored as markdown files in ~/vimwiki/
+" VimWiki: personal wiki stored as markdown files.
+" Path defaults to ~/vimwiki/ but can be overridden by $VIMWIKI_PATH
+" (set in system/macos.zsh to ~/Dropbox/vimwiki for syncing).
 " Open with `vw` shell alias or :VimwikiIndex
-let g:vimwiki_list = [{'path': '~/vimwiki/', 'syntax': 'markdown', 'ext': '.md'}]
+let s:wiki_path = exists('$VIMWIKI_PATH') ? $VIMWIKI_PATH : expand('~/vimwiki/')
+let g:vimwiki_list = [{'path': s:wiki_path, 'syntax': 'markdown', 'ext': '.md'}]
 
 " NERDTree: file explorer sidebar (toggle with Ctrl-n)
 let NERDTreeIgnore = ['\.pyc$', '\.pyo$', '__pycache__', '.ipynb_checkpoints']
