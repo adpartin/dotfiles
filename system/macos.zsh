@@ -17,6 +17,7 @@ fi
 # macOS ls uses -G for color (not --color=auto like GNU/Linux ls).
 # Override the GNU alias set in aliases.zsh.
 alias ls="ls -G"
+export LSCOLORS="Exfxcxdxcxegedabagacad"  # directories: bold/bright blue (default is dark blue)
 
 # ----------------------------------------------------------
 # VimWiki

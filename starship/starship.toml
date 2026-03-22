@@ -9,7 +9,7 @@ add_newline = true
 
 [username]
 show_always = true
-style_user = "fg:green bold"
+style_user = "fg:bright-white bold"
 format = "[$user]($style)"
 
 [hostname]
@@ -18,7 +18,7 @@ style = "fg:#61afef bold"
 format = "[@$hostname]($style) "
 
 [directory]
-style = "fg:cyan bold"
+style = "fg:#73c991"
 format = "[$path]($style)"
 truncation_length = 4
 truncation_symbol = "…/"
@@ -27,7 +27,7 @@ truncate_to_repo = false
 
 [git_branch]
 symbol = ""
-style = "fg:blue"
+style = "fg:#d19a66"
 format = " [\\($branch\\)]($style)"
 
 [git_status]
