@@ -121,6 +121,16 @@ Two files for machine-specific settings that should NOT be committed:
 
 Create them as needed. They are gitignored.
 
+Example `~/.zshrc.local` for systems with passphrase-protected SSH keys:
+
+```zsh
+# Auto-start ssh-agent so you only enter your passphrase once per login
+if [ -z "$SSH_AUTH_SOCK" ]; then
+    eval "$(ssh-agent -s)" > /dev/null
+    ssh-add ~/.ssh/id_rsa 2>/dev/null
+fi
+```
+
 ## Adding a new system
 
 1. Determine the hostname pattern (run `hostname -f` on the system)
