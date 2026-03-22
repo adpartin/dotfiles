@@ -63,6 +63,8 @@ All tools install into `$HOME` (no sudo required):
 │   └── vimrc                # Vim config → symlinked to ~/.vimrc
 ├── tmux/
 │   └── tmux.conf            # tmux config → symlinked to ~/.tmux.conf
+├── starship/
+│   └── starship.toml        # Starship prompt → symlinked to ~/.config/starship.toml
 ├── git/
 │   └── gitconfig            # Git config → symlinked to ~/.gitconfig
 └── system/
@@ -77,10 +79,11 @@ All tools install into `$HOME` (no sudo required):
 The installer creates these symlinks:
 
 ```
-~/.zshrc      → ~/dotfiles/zsh/zshrc
-~/.vimrc      → ~/dotfiles/vim/vimrc
-~/.tmux.conf  → ~/dotfiles/tmux/tmux.conf
-~/.gitconfig  → ~/dotfiles/git/gitconfig
+~/.zshrc                  → ~/dotfiles/zsh/zshrc
+~/.vimrc                  → ~/dotfiles/vim/vimrc
+~/.tmux.conf              → ~/dotfiles/tmux/tmux.conf
+~/.gitconfig              → ~/dotfiles/git/gitconfig
+~/.config/starship.toml   → ~/dotfiles/starship/starship.toml
 ```
 
 Editing `~/.zshrc` edits the repo file directly. Changes are tracked by git.

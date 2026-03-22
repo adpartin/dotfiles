@@ -15,8 +15,8 @@ Personal dotfiles repo using clone+symlinks pattern (not bare repo). The `redesi
 ## Target systems
 
 1. Lambda GPU nodes (lambda0, etc.) — validated and working
-2. MacBook (Apple M1 Max) — next to set up
-3. Polaris (ALCF HPC) — future
+2. MacBook (Apple M1 Max) — validated and working
+3. Polaris (ALCF HPC) — next to set up
 4. Aurora (ALCF HPC) — future
 
 ## Key decisions
@@ -43,4 +43,4 @@ Personal dotfiles repo using clone+symlinks pattern (not bare repo). The `redesi
 - Every setting must be ported or explicitly documented as intentionally removed
 - Test incrementally — build one file, test it, move on
 - System-specific settings go in `system/*.zsh`, not in the main zshrc or aliases
-- MacBook setup: `system/macos.zsh` needs to be populated (Homebrew PATH, macOS-specific settings, VimWiki path points to Dropbox)
+- Polaris setup: `system/polaris.zsh` needs to be populated (module system, project directories, proxy settings if needed)
