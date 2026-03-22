@@ -9,6 +9,7 @@
 # ----------------------------------------------------------
 alias ..="cd .."
 alias ...="cd ../.."
+alias ls="ls --color=auto"   # colorize ls output (dirs=blue, exec=green, symlinks=cyan)
 alias la="ls -la"
 alias ll="ls -l"
 

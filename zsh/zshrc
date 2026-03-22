@@ -149,6 +149,11 @@ fi
 # ----------------------------------------------------------
 # Conda (lazy-loaded)
 # ----------------------------------------------------------
+# Tell conda NOT to modify PS1 itself — Starship handles the prompt
+# and will show the active conda env via its own conda module.
+# Using an env var (not `conda config`) so we don't touch ~/.condarc.
+export CONDA_CHANGEPS1=false
+
 # Conda's init script (`conda shell.zsh hook`) takes ~2 seconds to run,
 # which makes every new shell slow. Instead, we define a thin wrapper
 # function called `conda` that does nothing until you actually use conda.

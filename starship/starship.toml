@@ -1,6 +1,56 @@
 # Starship prompt config — managed by ~/dotfiles
+# Styled after Oh My Zsh "gianu" theme.
+# Conda env is shown by Starship's conda module at the start of the line.
+# Format: (conda_env) [user@host path (branch)]$
 # See: https://starship.rs/config/
-# Presets: https://starship.rs/presets/
 
-# Add an empty line before each prompt (default: true)
-# add_newline = false
+format = """$conda[\\[](fg:yellow)$username$hostname$directory$git_branch$git_status[\\]](fg:yellow)$character"""
+add_newline = true
+
+[username]
+show_always = true
+style_user = "fg:green bold"
+format = "[$user]($style)"
+
+[hostname]
+ssh_only = false
+style = "fg:green bold"
+format = "[@$hostname]($style) "
+
+[directory]
+style = "fg:cyan bold"
+format = "[$path]($style)"
+truncation_length = 4
+truncation_symbol = "…/"
+# Treat ~ as home (shortens /homes/apartin or /Users/apartin to ~)
+truncate_to_repo = false
+
+[git_branch]
+symbol = ""
+style = "fg:blue"
+format = " [\\($branch\\)]($style)"
+
+[git_status]
+format = "[$modified](fg:red)"
+modified = "*"
+
+# Conda env is now shown by Starship (not conda's own PS1 modifier).
+# CONDA_CHANGEPS1=false in zshrc prevents conda from touching PS1.
+[conda]
+format = "[\\($environment\\) ](fg:yellow)"
+
+[python]
+disabled = true
+
+[character]
+success_symbol = "[\\$](bold white)"
+error_symbol = "[\\$](bold red)"
+
+[time]
+disabled = true
+
+[nodejs]
+disabled = true
+
+[package]
+disabled = true
