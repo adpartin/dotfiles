@@ -204,14 +204,15 @@ conda() {
 export NVM_DIR="$HOME/.nvm"
 if [[ -d "$NVM_DIR" ]]; then
     _load_nvm() {
-        unfunction nvm node npm npx _load_nvm 2>/dev/null
+        unfunction nvm node npm npx claude _load_nvm 2>/dev/null
         [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
         [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
     }
-    nvm()  { _load_nvm; nvm "$@"; }
-    node() { _load_nvm; node "$@"; }
-    npm()  { _load_nvm; npm "$@"; }
-    npx()  { _load_nvm; npx "$@"; }
+    nvm()    { _load_nvm; nvm "$@"; }
+    node()   { _load_nvm; node "$@"; }
+    npm()    { _load_nvm; npm "$@"; }
+    npx()    { _load_nvm; npx "$@"; }
+    claude() { _load_nvm; claude "$@"; }
 fi
 
 # ----------------------------------------------------------
