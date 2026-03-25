@@ -226,6 +226,13 @@ let g:python_highlight_space_errors = 0
 let s:wiki_path = exists('$VIMWIKI_PATH') ? $VIMWIKI_PATH : expand('~/vimwiki/')
 let g:vimwiki_list = [{'path': s:wiki_path, 'syntax': 'markdown', 'ext': '.md'}]
 
+" VimWiki sets buffer-local <Tab>/<S-Tab> mappings for jumping between links,
+" which override the global Tab/S-Tab buffer navigation mappings (line 182).
+" Buffer-local mappings always win, so we unmap just these two after VimWiki
+" sets them — leaving <CR> (follow link) and <Backspace> (go back) intact.
+autocmd FileType vimwiki nunmap <buffer> <Tab>
+autocmd FileType vimwiki nunmap <buffer> <S-Tab>
+
 " NERDTree: file explorer sidebar (toggle with Ctrl-n)
 let NERDTreeIgnore = ['\.pyc$', '\.pyo$', '__pycache__', '.ipynb_checkpoints']
 let NERDTreeQuitOnOpen=1         " close tree after opening a file
