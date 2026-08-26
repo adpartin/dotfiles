@@ -70,9 +70,12 @@ nvm install --lts
 
 # Claude Code
 npm install -g @anthropic-ai/claude-code
+
+# Codex CLI
+npm install -g @openai/codex
 ```
 
-NVM is lazy-loaded by `zshrc`, so after `install.sh`, `claude`, `node`, `npm`, and `npx` work automatically on all login nodes without manual NVM setup.
+NVM is lazy-loaded by `zshrc`, so after `install.sh`, `claude`, `codex`, `node`, `npm`, and `npx` work automatically on all login nodes without manual NVM setup.
 
 ## Aurora — ALCF HPC (aurora.zsh)
 

@@ -197,22 +197,43 @@ conda() {
 # NVM (lazy-loaded, if installed)
 # ----------------------------------------------------------
 # NVM (Node Version Manager) provides Node.js, which is
-# required by tools like Claude Code. NVM's init is slow
-# (~0.5s), so we wrap nvm/node/npm/npx in stub functions.
-# The first call to any of them sources the real NVM init,
-# removes all stubs, and forwards the command.
+# required by tools like Claude Code and Codex. NVM's init is
+# slow (~0.5s), so we wrap nvm/node/npm/npx and the Node-based
+# CLIs in stub functions. The first call to any of them sources
+# the real NVM init, removes all stubs, and forwards the command.
+#
+# The loader is deliberately NOT named with a leading underscore.
+# Tools that snapshot and replay shell functions (Claude Code's
+# bash tool is one) skip underscore-prefixed names as "internal".
+# If the loader is dropped but the stubs survive, each stub calls
+# a command that no longer exists and zsh recurses until it hits
+# FUNCNEST. The guard inside each stub is the second line of
+# defense against exactly that.
 export NVM_DIR="$HOME/.nvm"
 if [[ -d "$NVM_DIR" ]]; then
-    _load_nvm() {
-        unfunction nvm node npm npx claude _load_nvm 2>/dev/null
+    nvm-lazy-load() {
+        unfunction nvm node npm npx claude codex nvm-lazy-load nvm-lazy-init 2>/dev/null
         [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
         [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
     }
-    nvm()    { _load_nvm; nvm "$@"; }
-    node()   { _load_nvm; node "$@"; }
-    npm()    { _load_nvm; npm "$@"; }
-    npx()    { _load_nvm; npx "$@"; }
-    claude() { _load_nvm; claude "$@"; }
+
+    # Run the loader if it is there. If it is not, just remove the
+    # stubs so the command falls through to PATH — degrading to "no
+    # lazy loading" instead of recursing forever.
+    nvm-lazy-init() {
+        if (( ${+functions[nvm-lazy-load]} )); then
+            nvm-lazy-load
+        else
+            unfunction nvm node npm npx claude codex nvm-lazy-init 2>/dev/null
+        fi
+    }
+
+    nvm()    { nvm-lazy-init; nvm "$@"; }
+    node()   { nvm-lazy-init; node "$@"; }
+    npm()    { nvm-lazy-init; npm "$@"; }
+    npx()    { nvm-lazy-init; npx "$@"; }
+    claude() { nvm-lazy-init; claude "$@"; }
+    codex()  { nvm-lazy-init; codex "$@"; }
 fi
 
 # ----------------------------------------------------------
