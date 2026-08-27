@@ -1,2 +1,5 @@
 # Antidote auto-generated plugin script (rebuilt from plugins.txt on each shell start)
 zsh/plugins.zsh
+
+# macOS Finder metadata
+.DS_Store
