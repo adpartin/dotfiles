@@ -1,46 +1,42 @@
-# Dotfiles Project Context
+# Dotfiles Repository Guide
 
-## What this is
+## Purpose
 
-Personal dotfiles repo using clone+symlinks pattern (not bare repo). The `redesign` branch is the active development branch. The old bare-repo setup at `~/.dotfiles` still exists as a safety net on GPU nodes.
+This is a personal dotfiles repository for several systems. It uses a normal Git checkout
+and symlinks, not a bare repository. `install.sh` expects the checkout at `~/dotfiles`,
+backs up existing dotfiles, creates the symlinks, and installs user-space tools.
 
-## Architecture
+An older bare-repository setup still exists at `~/.dotfiles` on the Lambda GPU nodes.
+Keep it as a safety net unless the user explicitly asks to remove it.
 
-- `install.sh` creates symlinks from `~/dotfiles/<tool>/<config>` → `~/.<config>` and installs dependencies (Antidote, Starship, fzf, vim-plug, tpm) in user-space (no sudo on remote systems).
-- `zsh/zshrc` is modular: sources `aliases.zsh`, `functions.zsh`, system-specific files, and `~/.zshrc.local`.
-- System detection uses hostname patterns: `*lambda*` → gpu-node.zsh, `*polaris*` → polaris.zsh, `*aurora*` → aurora.zsh, `darwin*` → macos.zsh.
-- Conda and NVM are lazy-loaded (wrapper functions that init on first use) to keep shell startup fast.
-- `~/.zshrc.local` and `~/.gitconfig.local` hold machine-specific settings not tracked in git.
+## Layout
 
-## Target systems
+- `zsh/zshrc` loads the shared shell setup, aliases, functions, system config, and
+  `~/.zshrc.local`.
+- macOS is detected with `$OSTYPE`. Lambda, Polaris, and Aurora are detected by hostname
+  and load the matching file from `system/`.
+- Conda and NVM load only when first used to keep shell startup fast.
+- Machine-specific settings belong in `~/.zshrc.local` or `~/.gitconfig.local`. These
+  files are not tracked.
+- One-time software setup, including Codex and OpenCode, is documented in
+  `system/README.md`.
 
-1. Lambda GPU nodes (lambda0, etc.) — validated and working
-2. MacBook (Apple M1 Max) — validated and working
-3. Polaris (ALCF HPC) — next to set up
-4. Aurora (ALCF HPC) — future
+## System status
 
-## Key decisions
+- Lambda GPU nodes: validated and working.
+- MacBook (Apple M1 Max): validated and working.
+- Polaris: configuration is written; validation on Polaris is still pending.
+- Aurora: placeholder only; setup is still pending.
 
-- Antidote replaces Oh My Zsh (only 4 plugins needed)
-- vim-plug for Vim (already was in use, no migration)
-- Starship prompt (single binary, no sudo)
-- Ghostty terminfo fallback is in zshrc (passive until needed)
-- Phase 4 (removing old bare repo `~/.dotfiles`) is deferred until validated on at least 2 systems
+## Working rules
 
-## User preferences
-
-- Prefers Vim over Neovim
-- Uses vi mode in shell and Vim (leader key is comma)
-- Values clarity over cleverness — prefers explicit comments explaining what things do
-- Wants to play safe — don't remove old configs until new setup is validated
-- No sudo on remote systems, everything installs to $HOME
-- Ask before removing any existing settings
-
-## When helping with this repo
-
-- At the start of a session, run `hostname` and `uname -s` to identify which system you're on. This determines which `system/*.zsh` file applies and what's available (sudo, Homebrew, module system, etc.).
-- Read the relevant config file before suggesting changes
-- Every setting must be ported or explicitly documented as intentionally removed
-- Test incrementally — build one file, test it, move on
-- System-specific settings go in `system/*.zsh`, not in the main zshrc or aliases
-- Polaris setup: `system/polaris.zsh` needs to be populated (module system, project directories, proxy settings if needed)
+- Read the relevant files before suggesting or making changes.
+- Check `hostname -f` and `uname -s` before changing system-specific behavior.
+- Put system-specific settings in `system/*.zsh`, not in shared aliases or `zsh/zshrc`.
+- During migrations, preserve existing behavior or clearly document intentional removals.
+- Avoid sudo on remote systems and prefer user-space installs.
+- Do not remove old settings, backups, or the bare repository without explicit approval.
+- Prefer Vim over Neovim. Keep vi mode; the Vim leader key is comma.
+- Use plain language and comment only behavior that is not obvious.
+- Run focused checks after changes. For example, use `zsh -n zsh/zshrc` for Zsh syntax
+  and `git diff --check` for patch formatting.
