@@ -111,3 +111,34 @@ non-default `CODEX_HOME`, export it from `~/.zshrc.local` so every shell agrees.
 This repo's `./install.sh` deliberately does not manage any of the above — the Codex
 installer creates its own symlink, and `~/.local/bin` is already on PATH via `zshrc`
 (see the `~/.local/bin` block), so `codex` works in the next shell with no dotfiles change.
+
+## OpenCode CLI (all systems)
+
+Install the native OpenCode binary without letting its installer edit shell configuration,
+then link it into `~/.local/bin`, which is already on PATH via `zshrc`:
+
+```sh
+curl -fsSL https://opencode.ai/install | bash -s -- --no-modify-path
+ln -s "$HOME/.opencode/bin/opencode" "$HOME/.local/bin/opencode"
+opencode --version
+```
+
+The `--no-modify-path` flag is important because the installer otherwise appends an
+absolute `$HOME/.opencode/bin` entry to the first shell configuration file it finds. On
+these systems, `~/.zshrc` is a symlink into this repository, so that would add a
+machine-specific path to the shared dotfiles. The local symlink avoids any shell or NVM
+configuration changes. To update OpenCode later, rerun only the installer command; the
+symlink remains valid.
+
+### VS Code Remote-SSH
+
+Open a VS Code window connected to the remote host, open its integrated terminal, and run
+`opencode`. The official extension should install automatically. If it does not, install
+the verified extension from that remote terminal:
+
+```sh
+code --install-extension sst-dev.opencode
+```
+
+See the [OpenCode installation docs](https://opencode.ai/docs/) and
+[IDE integration docs](https://opencode.ai/docs/ide/).
