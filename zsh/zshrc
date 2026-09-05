@@ -197,7 +197,7 @@ conda() {
 # NVM (lazy-loaded, if installed)
 # ----------------------------------------------------------
 # NVM (Node Version Manager) provides Node.js, which is
-# required by tools like Claude Code and Codex. NVM's init is
+# required by tools like Claude Code. NVM's init is
 # slow (~0.5s), so we wrap nvm/node/npm/npx and the Node-based
 # CLIs in stub functions. The first call to any of them sources
 # the real NVM init, removes all stubs, and forwards the command.
@@ -212,7 +212,7 @@ conda() {
 export NVM_DIR="$HOME/.nvm"
 if [[ -d "$NVM_DIR" ]]; then
     nvm-lazy-load() {
-        unfunction nvm node npm npx claude codex nvm-lazy-load nvm-lazy-init 2>/dev/null
+        unfunction nvm node npm npx claude nvm-lazy-load nvm-lazy-init 2>/dev/null
         [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
         [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
     }
@@ -224,7 +224,7 @@ if [[ -d "$NVM_DIR" ]]; then
         if (( ${+functions[nvm-lazy-load]} )); then
             nvm-lazy-load
         else
-            unfunction nvm node npm npx claude codex nvm-lazy-init 2>/dev/null
+            unfunction nvm node npm npx claude nvm-lazy-init 2>/dev/null
         fi
     }
 
@@ -233,7 +233,6 @@ if [[ -d "$NVM_DIR" ]]; then
     npm()    { nvm-lazy-init; npm "$@"; }
     npx()    { nvm-lazy-init; npx "$@"; }
     claude() { nvm-lazy-init; claude "$@"; }
-    codex()  { nvm-lazy-init; codex "$@"; }
 fi
 
 # ----------------------------------------------------------
