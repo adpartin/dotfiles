@@ -130,6 +130,43 @@ machine-specific path to the shared dotfiles. The local symlink avoids any shell
 configuration changes. To update OpenCode later, rerun only the installer command; the
 symlink remains valid.
 
+### Authentication
+
+A plain install already works. With no credential at all, OpenCode serves the free models
+from its built-in `opencode` provider — seven of them as of September 2026. This was
+confirmed on a Lambda node with no `auth.json`, no OpenCode environment variables, and no
+login. Trust `opencode models` over published catalogs: models.dev lists thirty-one free
+`opencode/*` entries, but only seven are actually served. This behavior is not documented,
+so if a machine stops listing the free models, add a Zen key there.
+
+Authenticating adds the paid catalog and nothing else. On the MacBook, an OpenCode Zen key
+raises `opencode models` from seven entries to around 70, and the seven free models are
+identical on both machines. Add a key only when a machine needs the paid models:
+
+```sh
+opencode auth login          # select OpenCode Zen, then paste the key
+opencode auth list           # confirm the credential was stored
+```
+
+The key comes from https://opencode.ai/auth, which asks for billing details. OpenCode
+writes it to `~/.local/share/opencode/auth.json`. That path is per-machine state outside
+this repository and `install.sh` never touches it, so every machine needing paid models is
+authenticated on its own.
+
+The free models are promotional. OpenCode describes them as available for a limited time
+while the model teams gather feedback, and their data handling differs from the paid
+catalog: prompts sent to free models may be used to improve those models, and NVIDIA's
+free endpoints log usage for security and product improvement. Paid providers are mostly
+zero-retention, with OpenAI and Anthropic retaining for thirty days. Keep work that must
+stay private off the free models.
+
+Zen is not the only option. OpenCode supports signing in with an existing ChatGPT Plus or
+Pro subscription, GitHub Copilot, or GitLab Duo, which reuse a subscription instead of
+billing per token. A Claude Pro or Max subscription is not a usable path: only third-party
+plugins connect it, and OpenCode's documentation states that Anthropic explicitly
+prohibits this. Google models need Vertex service-account credentials rather than a
+consumer Gemini plan.
+
 ### VS Code Remote-SSH
 
 Open a VS Code window connected to the remote host, open its integrated terminal, and run
